@@ -93,7 +93,7 @@ function StatCard({
         </span>
       </div>
       <div className="text-sm font-semibold text-foreground mb-1">{label}</div>
-      <p className="text-xs text-muted-foreground leading-relaxed">{description}</p>
+      <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
     </motion.div>
   )
 }

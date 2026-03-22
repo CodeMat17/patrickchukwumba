@@ -77,7 +77,7 @@ export function About() {
                 Procurement Leader<br />with a{" "}
                 <span style={{ color: "var(--gold)" }}>Finance Edge</span>
               </h2>
-              <div className="space-y-4 text-muted-foreground leading-relaxed text-sm sm:text-base">
+              <div className="space-y-4 text-muted-foreground leading-relaxed text-s">
                 <p>
                   Skilled procurement manager with over <strong className="text-foreground">12 years</strong> of
                   procurement and Finance experience, covering multiple categories across Nigerian Breweries Plc
