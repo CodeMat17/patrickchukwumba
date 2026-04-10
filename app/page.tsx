@@ -1,17 +1,20 @@
-import { Navbar } from "@/components/navbar"
-import { Hero } from "@/components/sections/hero"
-import { Stats } from "@/components/sections/stats"
-import { About } from "@/components/sections/about"
-import { Experience } from "@/components/sections/experience"
-import { Skills } from "@/components/sections/skills"
-import { Education } from "@/components/sections/education"
-import { Contact } from "@/components/sections/contact"
-import { Footer } from "@/components/footer"
+// import { Navbar } from "@/components/navbar"
+// import { Hero } from "@/components/sections/hero"
+// import { Stats } from "@/components/sections/stats"
+// import { About } from "@/components/sections/about"
+// import { Experience } from "@/components/sections/experience"
+// import { Skills } from "@/components/sections/skills"
+// import { Education } from "@/components/sections/education"
+// import { Contact } from "@/components/sections/contact"
+// import { Footer } from "@/components/footer"
 
 export default function Page() {
   return (
     <main className="flex flex-col min-h-screen">
-      <Navbar />
+      <div className="flex justify-center items-center p-4 py-32">
+        THIS PORTFOLIO WILL BE DOWN SOON
+      </div>
+      {/* <Navbar />
       <Hero />
       <Stats />
       <About />
@@ -19,7 +22,7 @@ export default function Page() {
       <Skills />
       <Education />
       <Contact />
-      <Footer />
+      <Footer /> */}
     </main>
   )
 }
