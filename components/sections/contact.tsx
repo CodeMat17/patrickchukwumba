@@ -1,138 +1,139 @@
 "use client"
 
-import { useRef } from "react"
-import { motion, useInView } from "framer-motion"
-import { Mail, Phone, ExternalLink } from "lucide-react"
+import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react"
+import { profile } from "@/lib/cv"
+import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal"
 
-const contactItems = [
+const channels = [
   {
     icon: Mail,
     label: "Personal Email",
-    value: "Talk2pat0791@gmail.com",
-    href: "mailto:Talk2pat0791@gmail.com",
+    value: profile.emails.personal,
+    href: `mailto:${profile.emails.personal}`,
   },
   {
     icon: Mail,
     label: "Work Email",
-    value: "Patrick.chukwumbw@heineken.com",
-    href: "mailto:Patrick.chukwumbw@heineken.com",
+    value: profile.emails.work,
+    href: `mailto:${profile.emails.work}`,
   },
   {
     icon: Phone,
     label: "Primary Phone",
-    value: "+234 706 876 4902",
-    href: "tel:+2347068764902",
+    value: profile.phones.primary.display,
+    href: profile.phones.primary.href,
   },
   {
     icon: Phone,
     label: "Secondary Phone",
-    value: "+234 902 056 8338",
-    href: "tel:+2349020568338",
+    value: profile.phones.secondary.display,
+    href: profile.phones.secondary.href,
   },
-]
+] as const
 
 export function Contact() {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
-
   return (
-    <section id="contact" className="py-20 sm:py-28">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" ref={ref}>
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="mb-12 text-center"
-        >
-          <span className="inline-block text-xs font-semibold tracking-widest uppercase mb-3"
-            style={{ color: "var(--gold)" }}>
-            Reach Out
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground">
-            Get In{" "}
-            <span style={{ color: "var(--gold)" }}>Touch</span>
-          </h2>
-          <p className="mt-3 text-muted-foreground text-sm max-w-xl mx-auto">
-            Available for strategic procurement discussions, consulting opportunities, or professional collaborations.
-          </p>
-        </motion.div>
+    <section id="contact" className="scroll-mt-24 py-24 sm:py-36">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <div className="grain relative overflow-hidden rounded-[2rem] gradient-ink px-6 py-16 sm:px-14 sm:py-20">
+          {/* Brass light pool */}
+          <div
+            className="pointer-events-none absolute -right-[8%] -top-[30%] size-[32rem] rounded-full blur-[130px] opacity-[0.18]"
+            style={{ background: "var(--gold)" }}
+            aria-hidden
+          />
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
-          {contactItems.map((item, i) => (
-            <motion.div
-              key={item.label}
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.4, delay: 0.1 + i * 0.08 }}
-            >
-              {item.href ? (
-                <a
-                  href={item.href}
-                  className="group flex items-start gap-4 p-5 rounded-2xl bg-card ring-1 ring-border hover:ring-[var(--gold)]/40 hover:shadow-md transition-all duration-300 h-full"
-                >
-                  <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors"
-                    style={{ background: "oklch(0.72 0.15 82 / 10%)" }}>
-                    <item.icon className="size-4" style={{ color: "var(--gold)" }} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2">
-                      <p className="text-xs text-muted-foreground">{item.label}</p>
-                      <ExternalLink className="size-3 text-muted-foreground/50 group-hover:text-muted-foreground transition-colors" />
-                    </div>
-                    <p className="text-sm font-medium text-foreground mt-0.5 break-all">{item.value}</p>
-                  </div>
-                </a>
-              ) : (
-                <div className="flex items-start gap-4 p-5 rounded-2xl bg-card ring-1 ring-border h-full">
-                  <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: "oklch(0.72 0.15 82 / 10%)" }}>
-                    <item.icon className="size-4" style={{ color: "var(--gold)" }} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs text-muted-foreground">{item.label}</p>
-                    <p className="text-sm font-medium text-foreground mt-0.5">{item.value}</p>
-                  </div>
+          <div className="relative z-10 grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
+            {/* ── Invitation ── */}
+            <div>
+              <Reveal direction="up">
+                <div className="flex items-center gap-3">
+                  <span className="h-px w-8 bg-gold/60" />
+                  <span className="eyebrow">Get in touch</span>
                 </div>
-              )}
-            </motion.div>
-          ))}
-        </div>
+              </Reveal>
 
-        {/* CTA Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="mt-12 max-w-4xl mx-auto rounded-2xl p-8 text-center relative overflow-hidden"
-          style={{
-            background: "linear-gradient(135deg, oklch(0.22 0.06 255), oklch(0.15 0.05 270))",
-          }}
-        >
-          <div className="absolute inset-0 opacity-20"
-            style={{
-              backgroundImage: "radial-gradient(circle at 70% 50%, var(--gold) 0%, transparent 60%)",
-            }} />
-          <div className="relative z-10">
-            <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
-              Open to Strategic Conversations
-            </h3>
-            <p className="text-white/70 text-sm mb-6 max-w-md mx-auto">
-              Whether you&apos;re a procurement leader, supplier, or business partner — let&apos;s connect and create value together.
-            </p>
-            <a
-              href="mailto:Talk2pat0791@gmail.com"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all hover:-translate-y-0.5 hover:shadow-xl"
-              style={{
-                background: "var(--gold)",
-                color: "oklch(0.13 0.04 255)",
-              }}
-            >
-              <Mail className="size-4" />
-              Send a Message
-            </a>
+              <Reveal direction="up" delay={0.08}>
+                <h2 className="mt-6 font-display text-[clamp(2rem,4.2vw,3.2rem)] leading-[1.08] text-white">
+                  Let&apos;s talk procurement,{" "}
+                  <span className="text-gradient-gold">strategy and value</span>.
+                </h2>
+              </Reveal>
+
+              <Reveal direction="up" delay={0.14}>
+                <p className="mt-6 max-w-md text-[0.96rem] leading-[1.8] text-white/55">
+                  Open to strategic procurement conversations, advisory engagements and
+                  professional collaboration.
+                </p>
+              </Reveal>
+
+              <Reveal direction="up" delay={0.2}>
+                <div className="mt-9 flex flex-wrap items-center gap-3">
+                  <a
+                    href={`mailto:${profile.emails.personal}`}
+                    className="sheen group inline-flex items-center gap-2 rounded-full gradient-gold px-7 py-3.5 text-[0.85rem] font-semibold text-[oklch(0.16_0.02_265)] shadow-lift transition-transform duration-500 hover:-translate-y-0.5"
+                  >
+                    Send an email
+                    <ArrowUpRight className="size-4 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </a>
+                  <a
+                    href={profile.phones.primary.href}
+                    className="inline-flex items-center gap-2 rounded-full glass-dark px-7 py-3.5 text-[0.85rem] font-semibold text-white transition-colors duration-300 hover:bg-white/15"
+                  >
+                    <Phone className="size-4" />
+                    Call now
+                  </a>
+                </div>
+              </Reveal>
+
+              <Reveal direction="up" delay={0.26}>
+                <div className="mt-10 flex items-start gap-3 border-t border-white/10 pt-7">
+                  <MapPin
+                    className="mt-0.5 size-4 shrink-0"
+                    style={{ color: "var(--gold)" }}
+                  />
+                  <p className="max-w-xs text-[0.83rem] leading-relaxed text-white/45">
+                    {profile.address}
+                  </p>
+                </div>
+              </Reveal>
+            </div>
+
+            {/* ── Channels ── */}
+            <RevealGroup stagger={0.08} className="grid gap-3 sm:grid-cols-2">
+              {channels.map((channel) => (
+                <RevealItem key={channel.label} className="h-full">
+                  <a
+                    href={channel.href}
+                    className="group flex h-full flex-col justify-between gap-6 rounded-2xl glass-dark p-6 transition-all duration-500 hover:-translate-y-1 hover:bg-white/12"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <span
+                        className="grid size-9 place-items-center rounded-xl"
+                        style={{ background: "oklch(1 0 0 / 8%)" }}
+                      >
+                        <channel.icon
+                          className="size-4"
+                          style={{ color: "var(--gold)" }}
+                        />
+                      </span>
+                      <ArrowUpRight className="size-4 text-white/25 transition-all duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white/70" />
+                    </div>
+
+                    <div className="min-w-0">
+                      <p className="text-[0.64rem] uppercase tracking-[0.18em] text-white/40">
+                        {channel.label}
+                      </p>
+                      <p className="mt-1.5 break-words text-[0.9rem] font-medium text-white">
+                        {channel.value}
+                      </p>
+                    </div>
+                  </a>
+                </RevealItem>
+              ))}
+            </RevealGroup>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

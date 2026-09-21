@@ -10,18 +10,18 @@ import { Footer } from "@/components/footer"
 
 export default function Page() {
   return (
-    <main className="flex flex-col min-h-screen">
-      {/* <p className="text-center pt-32 font-bold tracking-widest text-4xl">Patrick Chukwumba</p>
-      <p className="text-center pt-3">...   ...   ...</p> */}
+    <>
       <Navbar />
-      <Hero />
-      <Stats />
-      <About />
-      <Experience />
-      <Skills />
-      <Education />
-      <Contact />
+      <main className="flex min-h-screen flex-col">
+        <Hero />
+        <Stats />
+        <About />
+        <Experience />
+        <Skills />
+        <Education />
+        <Contact />
+      </main>
       <Footer />
-    </main>
+    </>
   )
 }

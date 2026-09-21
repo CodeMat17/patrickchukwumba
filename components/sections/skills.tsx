@@ -1,150 +1,88 @@
 "use client"
 
-import { useRef } from "react"
-import { motion, useInView } from "framer-motion"
-
-const skillGroups = [
-  {
-    category: "Procurement",
-    skills: [
-      "Category Strategy Development",
-      "Strategic Sourcing",
-      "Tendering & RFx",
-      "Negotiation",
-      "Supplier Selection",
-      "Contract Management",
-      "Supplier Performance Management",
-      "Opportunity Assessment",
-      "STP Compliance",
-    ],
-  },
-  {
-    category: "Leadership",
-    skills: [
-      "People Management",
-      "Team Leadership",
-      "Capability Development",
-      "Stakeholder Management",
-      "Cross-functional Collaboration",
-      "Change Management",
-    ],
-  },
-  {
-    category: "Category Expertise",
-    skills: [
-      "Raw Materials",
-      "Packaging Materials",
-      "Investment Projects",
-      "Road Transportation",
-      "Internal Logistics",
-      "Energy & Utilities",
-      "Brewery Services",
-      "MRO Spares & Services",
-      "Regulatory Procurement",
-      "Business Services",
-    ],
-  },
-  {
-    category: "Finance & Analytics",
-    skills: [
-      "Financial Analysis",
-      "Cost Modelling",
-      "Benchmarking",
-      "Data Analytics",
-      "Budget Management",
-      "Tax & Consolidation",
-      "Inventory Management",
-    ],
-  },
-  {
-    category: "Tools & Technology",
-    skills: [
-      "Microsoft Office Suite",
-      "SAP",
-      "Procurement Platforms",
-      "Data Analytics Tools",
-      "ERP Systems",
-    ],
-  },
-]
+import { careerSnapshot, technicalSkills } from "@/lib/cv"
+import { Reveal, RevealGroup, RevealItem, SectionHeading } from "@/components/ui/reveal"
 
 export function Skills() {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
-
   return (
-    <section id="skills" className="py-20 sm:py-28">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="mb-12 text-center"
-          ref={ref}
-        >
-          <span className="inline-block text-xs font-semibold tracking-widest uppercase mb-3"
-            style={{ color: "var(--gold)" }}>
-            Expertise
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground">
-            Skills &{" "}
-            <span style={{ color: "var(--gold)" }}>Competencies</span>
-          </h2>
-        </motion.div>
+    <section id="skills" className="scroll-mt-24 py-24 sm:py-36">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <SectionHeading
+          eyebrow="Technical Skills"
+          title="Where the"
+          accent="expertise sits"
+          description="Commercial procurement capability built on top of a chartered finance foundation."
+        />
 
-        {/* Skill groups */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {skillGroups.map((group, gi) => (
-            <SkillGroup key={group.category} group={group} groupIndex={gi} parentInView={inView} />
+        {/* ── Technical skills ── */}
+        <RevealGroup stagger={0.1} className="mt-20 grid gap-6 lg:grid-cols-3">
+          {technicalSkills.map((group, gi) => (
+            <RevealItem key={group.group} className="h-full">
+              <div className="lift sheen h-full rounded-3xl surface-card p-7 sm:p-8">
+                <div className="flex items-baseline justify-between">
+                  <h3 className="font-display text-xl text-foreground">
+                    {group.group}
+                  </h3>
+                  <span
+                    className="text-[0.66rem] font-semibold tabular"
+                    style={{ color: "var(--gold)" }}
+                  >
+                    {String(gi + 1).padStart(2, "0")}
+                  </span>
+                </div>
+
+                <div className="rule-fade my-6" />
+
+                <ul className="space-y-0">
+                  {group.skills.map((skill) => (
+                    <li
+                      key={skill}
+                      className="flex items-center gap-3 border-b border-hairline py-3 last:border-0"
+                    >
+                      <span
+                        className="size-1 shrink-0 rounded-full"
+                        style={{ background: "var(--gold)" }}
+                      />
+                      <span className="text-[0.87rem] text-muted-foreground">
+                        {skill}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </RevealItem>
           ))}
-        </div>
+        </RevealGroup>
+
+        {/* ── Career snapshot ── */}
+        <Reveal direction="up" className="mt-24">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-8 bg-gold/60" />
+            <span className="eyebrow">Career Snapshot</span>
+          </div>
+        </Reveal>
+
+        <RevealGroup stagger={0.08} className="mt-8">
+          {careerSnapshot.map((item, i) => (
+            <RevealItem key={item.area} y={18}>
+              <div className="group grid gap-2 border-b border-hairline py-6 transition-colors duration-500 hover:border-gold/40 md:grid-cols-[auto_minmax(0,18rem)_1fr] md:items-baseline md:gap-8">
+                <span
+                  className="text-[0.66rem] font-semibold tabular"
+                  style={{ color: "var(--gold)" }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h4 className="font-display text-[1.15rem] text-foreground transition-colors duration-500 group-hover:text-gold">
+                  {item.area}
+                </h4>
+                <p className="text-[0.88rem] leading-relaxed text-muted-foreground">
+                  {item.detail}
+                </p>
+              </div>
+            </RevealItem>
+          ))}
+        </RevealGroup>
       </div>
     </section>
-  )
-}
-
-function SkillGroup({
-  group,
-  groupIndex,
-  parentInView,
-}: {
-  group: (typeof skillGroups)[0]
-  groupIndex: number
-  parentInView: boolean
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={parentInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: 0.1 + groupIndex * 0.08 }}
-      className="bg-card rounded-2xl p-6 ring-1 ring-border"
-    >
-      <div className="flex items-center gap-2 mb-4">
-        <div
-          className="w-1.5 h-5 rounded-full"
-          style={{ background: "var(--gold)" }}
-        />
-        <h3 className="text-sm font-semibold text-foreground">{group.category}</h3>
-      </div>
-      <div className="flex flex-wrap gap-2">
-        {group.skills.map((skill, si) => (
-          <motion.span
-            key={skill}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={parentInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.3, delay: 0.2 + groupIndex * 0.06 + si * 0.03 }}
-            className="px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors hover:border-[var(--gold)]/50 hover:text-foreground cursor-default"
-            style={{
-              background: "var(--muted)",
-              borderColor: "var(--border)",
-              color: "var(--muted-foreground)",
-            }}
-          >
-            {skill}
-          </motion.span>
-        ))}
-      </div>
-    </motion.div>
   )
 }

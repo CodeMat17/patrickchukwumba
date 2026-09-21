@@ -1,15 +1,28 @@
-import type { Metadata } from "next";
-import { Nunito } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter, Nunito } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  display: "swap",
+});
+
 const nunito = Nunito({
-  variable: "--font-nunito",
+  variable: "--font-display",
   subsets: ["latin"],
   display: "swap",
 });
 
 const siteUrl = "https://patrickchukwumba.com";
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fbfaf8" },
+    { media: "(prefers-color-scheme: dark)", color: "#14161d" },
+  ],
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -156,7 +169,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${nunito.variable} h-full antialiased`}
+      className={`${inter.variable} ${nunito.variable} h-full`}
       suppressHydrationWarning
     >
       <head>
