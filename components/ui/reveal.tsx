@@ -1,12 +1,19 @@
 "use client"
 
-import { useEffect, useRef, useState, type ReactNode } from "react"
 import {
-  motion,
-  useInView,
-  useReducedMotion,
-  type Variants,
-} from "framer-motion"
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+  type RefObject,
+} from "react"
+
+/*
+ * Scroll reveals are plain CSS transitions toggled by an IntersectionObserver.
+ * Keeping animation libraries out of these (used dozens of times per page)
+ * keeps hydration cheap and the main thread free while the page loads.
+ */
 
 /** Shared easing — a long, weighted ease-out used everywhere on the page. */
 export const EASE_OUT = [0.16, 1, 0.3, 1] as const
@@ -21,9 +28,34 @@ const OFFSETS: Record<Direction, { x: number; y: number }> = {
   none: { x: 0, y: 0 },
 }
 
+/** Flips to `true` the first time `amount` of the element is visible. */
+function useInViewOnce(ref: RefObject<Element | null>, amount: number) {
+  const [inView, setInView] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setInView(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: amount }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [ref, amount])
+
+  return inView
+}
+
 /**
  * Fades + slides its children in the first time they enter the viewport.
- * Collapses to a plain fade when the visitor prefers reduced motion.
+ * Reduced-motion visitors get the content instantly (see globals.css).
  */
 export function Reveal({
   children,
@@ -43,19 +75,24 @@ export function Reveal({
   as?: "div" | "section" | "li" | "span"
 }) {
   const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, amount })
-  const reduced = useReducedMotion()
-
-  const offset = reduced ? OFFSETS.none : OFFSETS[direction]
-  const Component = motion[as] as typeof motion.div
+  const inView = useInViewOnce(ref, amount)
+  const offset = OFFSETS[direction]
+  // One ref type serves every tag option.
+  const Component = as as "div"
 
   return (
     <Component
       ref={ref}
-      initial={{ opacity: 0, x: offset.x, y: offset.y }}
-      animate={inView ? { opacity: 1, x: 0, y: 0 } : undefined}
-      transition={{ duration: reduced ? 0.3 : duration, delay, ease: EASE_OUT }}
-      className={className}
+      data-shown={inView || undefined}
+      className={`reveal ${className ?? ""}`}
+      style={
+        {
+          "--reveal-x": `${offset.x}px`,
+          "--reveal-y": `${offset.y}px`,
+          "--reveal-duration": `${duration}s`,
+          "--reveal-delay": `${delay}s`,
+        } as CSSProperties
+      }
     >
       {children}
     </Component>
@@ -77,23 +114,27 @@ export function RevealGroup({
   amount?: number
 }) {
   const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, amount })
+  const inView = useInViewOnce(ref, amount)
 
-  const variants: Variants = {
-    hidden: {},
-    show: { transition: { staggerChildren: stagger, delayChildren: delay } },
-  }
+  useEffect(() => {
+    const root = ref.current
+    if (!inView || !root) return
+
+    // Only this group's own items — a nested group staggers its own.
+    const items = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-reveal-item]")
+    ).filter((item) => item.parentElement?.closest("[data-reveal-group]") === root)
+
+    items.forEach((item, i) => {
+      item.style.setProperty("--reveal-delay", `${delay + i * stagger}s`)
+      item.dataset.shown = "true"
+    })
+  }, [inView, delay, stagger])
 
   return (
-    <motion.div
-      ref={ref}
-      variants={variants}
-      initial="hidden"
-      animate={inView ? "show" : "hidden"}
-      className={className}
-    >
+    <div ref={ref} data-reveal-group="" className={className}>
       {children}
-    </motion.div>
+    </div>
   )
 }
 
@@ -106,27 +147,22 @@ export function RevealItem({
   className?: string
   y?: number
 }) {
-  const reduced = useReducedMotion()
-
-  const variants: Variants = {
-    hidden: { opacity: 0, y: reduced ? 0 : y },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: reduced ? 0.3 : 0.7, ease: EASE_OUT },
-    },
-  }
-
   return (
-    <motion.div variants={variants} className={className}>
+    <div
+      data-reveal-item=""
+      className={`reveal ${className ?? ""}`}
+      style={
+        { "--reveal-y": `${y}px`, "--reveal-duration": "0.7s" } as CSSProperties
+      }
+    >
       {children}
-    </motion.div>
+    </div>
   )
 }
 
 /**
- * Word-by-word headline reveal. Each word rises out of a clipping mask,
- * which reads far more deliberate than a single block fade.
+ * Word-by-word headline reveal. Each word rises and comes into focus. The text
+ * is never clipped or transparent, so it still counts as painted for LCP.
  */
 export function RevealWords({
   text,
@@ -145,7 +181,6 @@ export function RevealWords({
   highlight?: string[]
   highlightClassName?: string
 }) {
-  const reduced = useReducedMotion()
   const words = text.split(" ")
 
   return (
@@ -156,22 +191,17 @@ export function RevealWords({
         return (
           <span
             key={`${word}-${i}`}
-            className="inline-block overflow-hidden align-bottom pb-[0.12em] -mb-[0.12em]"
+            className="inline-block align-bottom pb-[0.12em] -mb-[0.12em]"
           >
-            <motion.span
-              className={`inline-block ${wordClassName ?? ""} ${
+            {/* CSS-driven so the headline animates before hydration (fast LCP). */}
+            <span
+              className={`animate-word inline-block ${wordClassName ?? ""} ${
                 isHighlighted ? highlightClassName : ""
               }`}
-              initial={{ y: reduced ? 0 : "110%", opacity: reduced ? 0 : 1 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{
-                duration: reduced ? 0.3 : 0.95,
-                delay: delay + i * stagger,
-                ease: EASE_OUT,
-              }}
+              style={{ animationDelay: `${delay + i * stagger}s` }}
             >
               {word}
-            </motion.span>
+            </span>
             {i < words.length - 1 ? " " : null}
           </span>
         )
@@ -191,35 +221,36 @@ export function Counter({
   className?: string
 }) {
   const ref = useRef<HTMLSpanElement>(null)
-  const inView = useInView(ref, { once: true, amount: 0.5 })
-  const reduced = useReducedMotion()
-  const [display, setDisplay] = useState(0)
+  const inView = useInViewOnce(ref, 0.5)
 
   useEffect(() => {
-    if (!inView || reduced) return
+    const el = ref.current
+    if (!inView || !el) return
+
+    // With reduced motion we skip the ramp and land on the final figure in one frame.
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    const total = reduced ? 0 : duration
 
     let raf = 0
     let startedAt: number | null = null
 
+    // Writes the text directly rather than re-rendering React every frame.
     const step = (now: number) => {
       if (startedAt === null) startedAt = now
-      const progress = Math.min((now - startedAt) / duration, 1)
+      const progress = total > 0 ? Math.min((now - startedAt) / total, 1) : 1
       // ease-out quart — fast ramp, long settle
       const eased = 1 - Math.pow(1 - progress, 4)
-      setDisplay(Math.round(eased * value))
+      el.textContent = Math.round(eased * value).toLocaleString("en-US")
       if (progress < 1) raf = requestAnimationFrame(step)
     }
 
     raf = requestAnimationFrame(step)
     return () => cancelAnimationFrame(raf)
-  }, [inView, value, duration, reduced])
-
-  // With reduced motion we skip the ramp entirely and render the final figure.
-  const shown = reduced ? value : display
+  }, [inView, value, duration])
 
   return (
     <span ref={ref} className={`tabular ${className ?? ""}`}>
-      {shown.toLocaleString()}
+      0
     </span>
   )
 }

@@ -1,16 +1,9 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useSyncExternalStore, type CSSProperties } from "react"
 import { useTheme } from "next-themes"
 import { Moon, Sun, Menu, X } from "lucide-react"
-import {
-  AnimatePresence,
-  motion,
-  useScroll,
-  useSpring,
-} from "framer-motion"
 import { scrollToSection, scrollToTop } from "@/lib/smooth-scroll"
-import { EASE_OUT } from "@/components/ui/reveal"
 
 const navLinks = [
   { label: "About", href: "#about" },
@@ -22,19 +15,14 @@ const navLinks = [
 
 const HEADER_OFFSET = 88
 
-/** Thin brass progress bar pinned to the very top of the viewport. */
+/**
+ * Thin brass progress bar pinned to the very top of the viewport. Driven by a
+ * CSS scroll timeline (see `.scroll-progress`), so it costs no JavaScript.
+ */
 function ScrollProgress() {
-  const { scrollYProgress } = useScroll()
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 140,
-    damping: 28,
-    restDelta: 0.001,
-  })
-
   return (
-    <motion.div
-      style={{ scaleX }}
-      className="fixed inset-x-0 top-0 z-[60] h-[2px] origin-left gradient-gold"
+    <div
+      className="scroll-progress fixed inset-x-0 top-0 z-[60] h-[2px] origin-left gradient-gold"
       aria-hidden
     />
   )
@@ -72,13 +60,15 @@ function useActiveSection() {
   return active
 }
 
+const subscribeNoop = () => () => {}
+
 function ThemeToggle({ onDark }: { onDark: boolean }) {
   const { resolvedTheme, setTheme } = useTheme()
 
-  // next-themes leaves this undefined until it has read the client preference,
-  // which doubles as our "mounted" signal and keeps the markup hydration-safe.
-  const mounted = resolvedTheme !== undefined
-  const isDark = resolvedTheme === "dark"
+  // The theme is only known on the client, so render the neutral state until
+  // hydration has finished to keep the server and client markup identical.
+  const mounted = useSyncExternalStore(subscribeNoop, () => true, () => false)
+  const isDark = mounted && resolvedTheme === "dark"
 
   return (
     <button
@@ -90,20 +80,11 @@ function ThemeToggle({ onDark }: { onDark: boolean }) {
           : "border-hairline text-muted-foreground hover:border-gold/40 hover:text-foreground"
       }`}
     >
-      <AnimatePresence mode="wait" initial={false}>
-        {mounted ? (
-          <motion.span
-            key={isDark ? "sun" : "moon"}
-            initial={{ opacity: 0, rotate: -90, scale: 0.6 }}
-            animate={{ opacity: 1, rotate: 0, scale: 1 }}
-            exit={{ opacity: 0, rotate: 90, scale: 0.6 }}
-            transition={{ duration: 0.35, ease: EASE_OUT }}
-            className="absolute"
-          >
-            {isDark ? <Sun className="size-4" /> : <Moon className="size-4" />}
-          </motion.span>
-        ) : null}
-      </AnimatePresence>
+      {mounted ? (
+        <span key={isDark ? "sun" : "moon"} className="animate-spin-in absolute">
+          {isDark ? <Sun className="size-4" /> : <Moon className="size-4" />}
+        </span>
+      ) : null}
     </button>
   )
 }
@@ -135,7 +116,7 @@ export function Navbar() {
 
   const go = (href: string) => {
     setMobileOpen(false)
-    // Wait a beat so the sheet's exit animation doesn't fight the scroll.
+    // Wait a frame so the sheet has closed and unlocked scrolling first.
     requestAnimationFrame(() => scrollToSection(href, HEADER_OFFSET))
   }
 
@@ -143,11 +124,9 @@ export function Navbar() {
     <>
       <ScrollProgress />
 
-      <motion.header
-        initial={{ y: -24, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.9, ease: EASE_OUT, delay: 0.1 }}
-        className='fixed inset-x-0 top-0 z-50'>
+      <header
+        className='animate-rise fixed inset-x-0 top-0 z-50'
+        style={{ "--rise-y": "-24px", animationDelay: "0.1s" } as CSSProperties}>
         <div
           className={`transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500 ${
             scrolled
@@ -158,26 +137,26 @@ export function Navbar() {
             {/* Monogram */}
             <button
               onClick={scrollToTop}
-              className='group flex items-center gap-3'
-              aria-label='Back to top'>
-              <span className='grid size-9 place-items-center rounded-xl gradient-gold text-[0.7rem] font-bold tracking-tight text-[oklch(0.16_0.02_265)] shadow-soft transition-transform duration-500 group-hover:scale-105'>
+              className='group flex items-center gap-3'>
+              <span aria-hidden className='grid size-9 place-items-center rounded-xl gradient-gold text-[0.7rem] font-bold tracking-tight text-[oklch(0.16_0.02_265)] shadow-soft transition-transform duration-500 group-hover:scale-105'>
                 PC
               </span>
-              <div className='text-start flex-col leading-none'>
-                <p
+              <span className='flex flex-col text-start leading-none'>
+                <span
                   className={`font-display text-[0.95rem] transition-colors duration-500 ${
                     onDark ? "text-white" : "text-foreground"
                   }`}>
-                  Patrick Chukwumba 
-                </p>
+                  Patrick Chukwumba
+                </span>
 
-                <p
+                <span
                   className={`mt-1 text-[0.58rem] uppercase tracking-[0.2em] transition-colors duration-500 ${
                     onDark ? "text-white/45" : "text-muted-foreground"
                   }`}>
                   Supply Chain
-                </p>
-              </div>
+                  <span className='sr-only'> — back to top</span>
+                </span>
+              </span>
             </button>
 
             {/* Desktop links */}
@@ -199,13 +178,7 @@ export function Navbar() {
                           : "text-muted-foreground hover:text-foreground"
                     }`}>
                     {isActive ? (
-                      <motion.span
-                        layoutId='nav-pill'
-                        transition={{
-                          type: "spring",
-                          stiffness: 380,
-                          damping: 32,
-                        }}
+                      <span
                         className={`absolute inset-0 -z-10 rounded-full ${
                           onDark ? "bg-white/10" : "bg-gold/12"
                         }`}
@@ -248,17 +221,13 @@ export function Navbar() {
             </div>
           </nav>
         </div>
-      </motion.header>
+      </header>
 
       {/* Mobile sheet */}
-      <AnimatePresence>
-        {mobileOpen ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className='fixed inset-0 z-40 md:hidden'>
+      {mobileOpen ? (
+          <div
+            className='animate-rise fixed inset-0 z-40 md:hidden'
+            style={{ "--rise-y": "0px", animationDuration: "0.3s" } as CSSProperties}>
             <div
               className='absolute inset-0 bg-background/95 backdrop-blur-xl'
               onClick={() => setMobileOpen(false)}
@@ -266,38 +235,27 @@ export function Navbar() {
 
             <div className='relative flex h-full flex-col justify-center px-8'>
               {navLinks.map((link, i) => (
-                <motion.button
+                <button
                   key={link.href}
                   onClick={() => go(link.href)}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 12 }}
-                  transition={{
-                    delay: 0.06 + i * 0.06,
-                    duration: 0.5,
-                    ease: EASE_OUT,
-                  }}
-                  className='group flex items-baseline gap-4 border-b border-hairline py-5 text-left'>
+                  style={{ "--rise-y": "24px", animationDuration: "0.5s", animationDelay: `${0.06 + i * 0.06}s` } as CSSProperties}
+                  className='animate-rise group flex items-baseline gap-4 border-b border-hairline py-5 text-left'>
                   <span className='eyebrow w-6 text-[0.6rem]'>0{i + 1}</span>
                   <span className='font-display text-3xl text-foreground transition-colors group-hover:text-gold'>
                     {link.label}
                   </span>
-                </motion.button>
+                </button>
               ))}
 
-              <motion.a
+              <a
                 href='mailto:Talk2pat0791@gmail.com'
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ delay: 0.42, duration: 0.5, ease: EASE_OUT }}
-                className='mt-10 inline-flex items-center justify-center rounded-full gradient-gold px-6 py-3.5 text-sm font-semibold text-[oklch(0.16_0.02_265)]'>
+                style={{ "--rise-y": "24px", animationDuration: "0.5s", animationDelay: "0.42s" } as CSSProperties}
+                className='animate-rise mt-10 inline-flex items-center justify-center rounded-full gradient-gold px-6 py-3.5 text-sm font-semibold text-[oklch(0.16_0.02_265)]'>
                 Talk2pat0791@gmail.com
-              </motion.a>
+              </a>
             </div>
-          </motion.div>
+          </div>
         ) : null}
-      </AnimatePresence>
     </>
   );
 }

@@ -28,7 +28,6 @@ export function ProfilePhoto({ className = "" }: { className?: string }) {
             src="/profile.jpg"
             alt={profile.displayName}
             fill
-            priority
             sizes="(max-width: 1024px) 100vw, 420px"
             className="object-cover object-top transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
             onError={() => setHasError(true)}

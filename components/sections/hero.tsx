@@ -1,69 +1,55 @@
 "use client"
 
-import { useRef } from "react"
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "framer-motion"
+import type { CSSProperties } from "react"
 import { ArrowDown, ArrowUpRight, Mail, MapPin } from "lucide-react"
 import { profile, categories } from "@/lib/cv"
-import { EASE_OUT, RevealWords } from "@/components/ui/reveal"
+import { RevealWords } from "@/components/ui/reveal"
 import { scrollToSection } from "@/lib/smooth-scroll"
 
 const HEADER_OFFSET = 88
 
+/** Inline vars for the CSS `animate-rise` entrance, which runs before hydration. */
+const rise = (delay: number, y = 18, duration = 0.9) =>
+  ({
+    "--rise-y": `${y}px`,
+    animationDuration: `${duration}s`,
+    animationDelay: `${delay}s`,
+  }) as CSSProperties
+
 export function Hero() {
-  const ref = useRef<HTMLElement>(null)
-  const reduced = useReducedMotion()
-
-  // Parallax: the content drifts up and fades as the hero leaves the viewport.
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  })
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", reduced ? "0%" : "22%"])
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.75], [1, reduced ? 1 : 0])
-  const orbY = useTransform(scrollYProgress, [0, 1], ["0%", reduced ? "0%" : "-30%"])
-  const gridY = useTransform(scrollYProgress, [0, 1], ["0%", reduced ? "0%" : "12%"])
-
+  // Parallax (content drifts and fades, light pools and grid drift) runs on
+  // CSS scroll timeline — see the `parallax-*` classes in globals.css.
   return (
     <section
-      ref={ref}
       className="grain relative flex min-h-[100svh] items-center overflow-hidden gradient-ink"
     >
       {/* Brass light pools */}
-      <motion.div style={{ y: orbY }} className="absolute inset-0" aria-hidden>
+      <div className="parallax-orbs absolute inset-0" aria-hidden>
         <div
-          className="absolute -right-[10%] top-[6%] size-[min(46rem,90vw)] rounded-full blur-[140px] opacity-[0.22]"
-          style={{ background: "var(--gold)" }}
+          className="absolute -right-[10%] top-[6%] size-[min(46rem,90vw)] scale-[1.4] rounded-full opacity-[0.22]"
+          style={{ background: `radial-gradient(closest-side, var(--gold) 15%, transparent)` }}
         />
         <div
-          className="absolute -left-[12%] bottom-[-8%] size-[min(34rem,80vw)] rounded-full blur-[130px] opacity-[0.14]"
-          style={{ background: "var(--gold-deep)" }}
+          className="absolute -left-[12%] bottom-[-8%] size-[min(34rem,80vw)] scale-[1.4] rounded-full opacity-[0.14]"
+          style={{ background: `radial-gradient(closest-side, var(--gold-deep) 15%, transparent)` }}
         />
-      </motion.div>
+      </div>
 
       {/* Engraved grid */}
-      <motion.div
-        style={{ y: gridY }}
-        className="grid-etch absolute inset-0 opacity-[0.045]"
+      <div
+        className="parallax-grid grid-etch absolute inset-0 opacity-[0.045]"
         aria-hidden
       />
 
-      <motion.div
-        style={{ y: contentY, opacity: contentOpacity }}
-        className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-28 pt-32 sm:px-8 sm:pt-36"
+      <div
+        className="parallax-content relative z-10 mx-auto w-full max-w-7xl px-5 pb-28 pt-32 sm:px-8 sm:pt-36"
       >
         <div className="grid items-end gap-14 lg:grid-cols-[1.35fr_1fr]">
           {/* ── Left: the statement ── */}
           <div>
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: EASE_OUT, delay: 0.15 }}
-              className="inline-flex items-center gap-2.5 rounded-full glass-dark px-4 py-2"
+            <div
+              className="animate-rise inline-flex items-center gap-2.5 rounded-full glass-dark px-4 py-2"
+              style={rise(0.15, 16, 0.8)}
             >
               <span className="relative flex size-1.5">
                 <span
@@ -78,7 +64,7 @@ export function Hero() {
               <span className="text-[0.68rem] font-medium uppercase tracking-[0.18em] text-white/70">
                 {profile.company} · {profile.group}
               </span>
-            </motion.div>
+            </div>
 
             <h1 className="mt-8 font-display text-[clamp(2.9rem,8.2vw,6.4rem)] leading-[0.94] text-white">
               <RevealWords text="Patrick" delay={0.3} />
@@ -96,19 +82,15 @@ export function Hero() {
                   className="pointer-events-none absolute -bottom-[0.14em] left-0 h-[0.22em] w-full overflow-visible"
                   aria-hidden
                 >
-                  <motion.path
+                  <path
+                    className="animate-draw"
+                    pathLength={1}
                     d="M4 16 C 60 6, 120 4, 180 9 S 270 18, 296 8"
                     fill="none"
                     stroke="var(--gold)"
                     strokeWidth={5}
                     strokeLinecap="round"
                     vectorEffect="non-scaling-stroke"
-                    initial={{ pathLength: reduced ? 1 : 0, opacity: reduced ? 1 : 0 }}
-                    animate={{ pathLength: 1, opacity: 1 }}
-                    transition={{
-                      pathLength: { duration: 1.1, ease: EASE_OUT, delay: 0.9 },
-                      opacity: { duration: 0.2, delay: 0.9 },
-                    }}
                   />
                 </svg>
               </span>
@@ -116,11 +98,9 @@ export function Hero() {
               <RevealWords text="Okorie" delay={0.5} />
             </h1>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, ease: EASE_OUT, delay: 0.8 }}
-              className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3"
+            <div
+              className="animate-rise mt-8 flex flex-wrap items-center gap-x-5 gap-y-3"
+              style={rise(0.8, 0, 1)}
             >
               <span className="text-[0.95rem] font-medium uppercase tracking-[0.2em] text-white/85 sm:text-[1.05rem]">
                 {profile.title}
@@ -130,26 +110,22 @@ export function Hero() {
                 <MapPin className="size-3.5" />
                 {profile.location}
               </span>
-            </motion.div>
+            </div>
 
-            <motion.p
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, ease: EASE_OUT, delay: 0.92 }}
-              className="mt-7 max-w-xl text-[0.98rem] leading-[1.75] text-white/60"
+            <p
+              className="animate-rise mt-7 max-w-xl text-[0.98rem] leading-[1.75] text-white/60"
+              style={rise(0.92, 18, 0.9)}
             >
               22+ years inside the HEINEKEN Group, turning a finance foundation into
               procurement leadership — a{" "}
               <span className="font-semibold text-white/90">€450M+</span> annual spend
               portfolio and an ecosystem of{" "}
               <span className="font-semibold text-white/90">1,100+ suppliers</span>.
-            </motion.p>
+            </p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, ease: EASE_OUT, delay: 1.04 }}
-              className="mt-10 flex flex-wrap items-center gap-3"
+            <div
+              className="animate-rise mt-10 flex flex-wrap items-center gap-3"
+              style={rise(1.04, 18, 0.9)}
             >
               <button
                 onClick={() => scrollToSection("#experience", HEADER_OFFSET)}
@@ -166,15 +142,13 @@ export function Hero() {
                 <Mail className="size-4" />
                 Get in touch
               </button>
-            </motion.div>
+            </div>
           </div>
 
           {/* ── Right: the ledger ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: EASE_OUT, delay: 0.7 }}
-            className="rounded-3xl glass-dark p-7 sm:p-8"
+          <div
+            className="animate-rise rounded-3xl glass-dark p-7 sm:p-8"
+              style={rise(0.7, 28, 1)}
           >
             <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-white/40">
               Categories under management
@@ -182,16 +156,10 @@ export function Hero() {
 
             <ul className="mt-6 space-y-0">
               {categories.map((category, i) => (
-                <motion.li
+                <li
                   key={category}
-                  initial={{ opacity: 0, x: 14 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{
-                    duration: 0.7,
-                    ease: EASE_OUT,
-                    delay: 0.95 + i * 0.07,
-                  }}
-                  className="flex items-baseline gap-4 border-b border-white/8 py-3 last:border-0"
+                  style={{ "--rise-x": "14px", "--rise-y": "0px", animationDuration: "0.7s", animationDelay: `${0.95 + i * 0.07}s` } as CSSProperties}
+                  className="animate-rise flex items-baseline gap-4 border-b border-white/8 py-3 last:border-0"
                 >
                   <span
                     className="text-[0.62rem] font-semibold tabular"
@@ -200,7 +168,7 @@ export function Hero() {
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span className="text-[0.92rem] text-white/75">{category}</span>
-                </motion.li>
+                </li>
               ))}
             </ul>
 
@@ -223,27 +191,22 @@ export function Hero() {
                 <p className="mt-1.5 font-display text-3xl text-white">1,100+</p>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Scroll cue */}
-      <motion.button
+      <button
         onClick={() => scrollToSection("#about", HEADER_OFFSET)}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.6, duration: 1 }}
-        className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2.5 text-white/35 transition-colors duration-300 hover:text-white/70"
+        style={rise(1.6, 0, 1)}
+        className="animate-rise absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2.5 text-white/35 transition-colors duration-300 hover:text-white/70"
         aria-label="Scroll to about section"
       >
         <span className="text-[0.6rem] uppercase tracking-[0.3em]">Scroll</span>
-        <motion.span
-          animate={reduced ? undefined : { y: [0, 7, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        >
+        <span className="animate-bob">
           <ArrowDown className="size-4" />
-        </motion.span>
-      </motion.button>
+        </span>
+      </button>
     </section>
   )
 }

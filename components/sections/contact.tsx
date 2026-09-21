@@ -38,8 +38,8 @@ export function Contact() {
         <div className="grain relative overflow-hidden rounded-[2rem] gradient-ink px-6 py-16 sm:px-14 sm:py-20">
           {/* Brass light pool */}
           <div
-            className="pointer-events-none absolute -right-[8%] -top-[30%] size-[32rem] rounded-full blur-[130px] opacity-[0.18]"
-            style={{ background: "var(--gold)" }}
+            className="pointer-events-none absolute -right-[8%] -top-[30%] size-[32rem] scale-[1.4] rounded-full opacity-[0.18]"
+            style={{ background: `radial-gradient(closest-side, var(--gold) 15%, transparent)` }}
             aria-hidden
           />
 

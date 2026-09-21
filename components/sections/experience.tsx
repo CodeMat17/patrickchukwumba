@@ -1,7 +1,5 @@
 "use client"
 
-import { useRef } from "react"
-import { motion, useScroll, useSpring } from "framer-motion"
 import { earlierRoles, roles } from "@/lib/cv"
 import { Reveal, RevealGroup, RevealItem, SectionHeading } from "@/components/ui/reveal"
 
@@ -75,19 +73,6 @@ function RoleCard({ role }: { role: (typeof roles)[number] }) {
 }
 
 export function Experience() {
-  const timelineRef = useRef<HTMLDivElement>(null)
-
-  // The brass spine fills as the timeline scrolls past the middle of the viewport.
-  const { scrollYProgress } = useScroll({
-    target: timelineRef,
-    offset: ["start 75%", "end 60%"],
-  })
-  const scaleY = useSpring(scrollYProgress, {
-    stiffness: 110,
-    damping: 30,
-    restDelta: 0.001,
-  })
-
   return (
     <section
       id="experience"
@@ -102,17 +87,16 @@ export function Experience() {
         />
 
         {/* ── Timeline ── */}
-        <div ref={timelineRef} className="relative mt-20 pl-8 sm:pl-12">
+        <div className="relative mt-20 pl-8 sm:pl-12">
           {/* Track */}
           <div
             className="absolute left-[3px] top-2 bottom-2 w-px sm:left-[7px]"
             style={{ background: "var(--hairline)" }}
             aria-hidden
           />
-          {/* Fill */}
-          <motion.div
-            style={{ scaleY }}
-            className="absolute left-[3px] top-2 bottom-2 w-px origin-top sm:left-[7px]"
+          {/* Fill — grows as the timeline scrolls past the middle of the viewport (CSS scroll timeline). */}
+          <div
+            className="timeline-fill absolute left-[3px] top-2 bottom-2 w-px origin-top sm:left-[7px]"
             aria-hidden
           >
             <div
@@ -122,7 +106,7 @@ export function Experience() {
                   "linear-gradient(to bottom, var(--gold-soft), var(--gold), var(--gold-deep))",
               }}
             />
-          </motion.div>
+          </div>
 
           <RevealGroup stagger={0.1} amount={0.05} className="space-y-6">
             {roles.map((role) => (
