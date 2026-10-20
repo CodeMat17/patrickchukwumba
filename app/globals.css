@@ -437,6 +437,10 @@
   stroke-dasharray: 1;
   animation: draw 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.9s both;
 }
+.animate-grow-x {
+  transform-origin: left;
+  animation: grow-x 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
 .animate-bob {
   animation: bob 2s ease-in-out infinite;
 }
@@ -527,6 +531,13 @@
     }
     .parallax-grid {
       animation-name: parallax-grid;
+    }
+  }
+  /* On small screens the hero content is tall and still being read as it
+     scrolls, so it stays put and fully opaque; only the backdrop drifts. */
+  @media (max-width: 767px) {
+    .parallax-content {
+      animation: none;
     }
   }
 }

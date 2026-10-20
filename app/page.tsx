@@ -11,8 +11,8 @@ import { Footer } from "@/components/footer"
 export default function Page() {
   return (
     <>
-      <p className='px-4 text-center min-h-screen justify-center py-32 font-bold text-4xl'>This site is undergoing maintenance. check again soon.</p>
-      {/* <Navbar />
+    
+      <Navbar />
       <main className="flex min-h-screen flex-col">
         <Hero />
         <Stats />
@@ -22,7 +22,7 @@ export default function Page() {
         <Education />
         <Contact />
       </main>
-      <Footer /> */}
+      <Footer />
     </>
   )
 }

@@ -2,7 +2,7 @@
 
 import type { CSSProperties } from "react"
 import { ArrowDown, ArrowUpRight, Mail, MapPin } from "lucide-react"
-import { profile, categories } from "@/lib/cv"
+import { profile, categories, roles, education, certifications } from "@/lib/cv"
 import { RevealWords } from "@/components/ui/reveal"
 import { scrollToSection } from "@/lib/smooth-scroll"
 
@@ -15,6 +15,15 @@ const rise = (delay: number, y = 18, duration = 0.9) =>
     animationDuration: `${duration}s`,
     animationDelay: `${delay}s`,
   }) as CSSProperties
+
+const currentRole = roles[0]
+const credentials = [...education, ...certifications]
+
+/** Finance ran Jul 2004 – Sep 2012; procurement from Oct 2012 to today. */
+const arc = [
+  { label: "Finance & control", span: "2004 — 2012", years: 8.2, color: "rgb(255 255 255 / 0.28)" },
+  { label: "Procurement leadership", span: "2012 — today", years: new Date().getFullYear() - 2012.75, color: "var(--gold)" },
+]
 
 export function Hero() {
   // Parallax (content drifts and fades, light pools and grid drift) runs on
@@ -42,9 +51,9 @@ export function Hero() {
       />
 
       <div
-        className="parallax-content relative z-10 mx-auto w-full max-w-7xl px-5 pb-28 pt-32 sm:px-8 sm:pt-36"
+        className="parallax-content relative z-10 mx-auto w-full max-w-7xl px-5 pb-28 pt-32 sm:px-8 sm:pt-36 lg:pb-[max(4.5rem,9svh)] lg:pt-[calc(88px+4svh)]"
       >
-        <div className="grid items-end gap-14 lg:grid-cols-[1.35fr_1fr]">
+        <div className="grid items-end gap-14 lg:grid-cols-[1.35fr_1fr] lg:items-center lg:gap-[clamp(2.5rem,5vw,4.5rem)]">
           {/* ── Left: the statement ── */}
           <div>
             <div
@@ -66,7 +75,7 @@ export function Hero() {
               </span>
             </div>
 
-            <h1 className="mt-8 font-display text-[clamp(2.9rem,8.2vw,6.4rem)] leading-[0.94] text-white">
+            <h1 className="mt-8 font-display text-[clamp(2.9rem,8.2vw,6.4rem)] leading-[0.94] lg:mt-[3svh] lg:text-[clamp(3.25rem,min(6.4vw,11svh),6.4rem)] text-white">
               <RevealWords text="Patrick" delay={0.3} />
               <br />
               <span className="relative inline-block">
@@ -99,7 +108,7 @@ export function Hero() {
             </h1>
 
             <div
-              className="animate-rise mt-8 flex flex-wrap items-center gap-x-5 gap-y-3"
+              className="animate-rise mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 lg:mt-[3svh]"
               style={rise(0.8, 0, 1)}
             >
               <span className="text-[0.95rem] font-medium uppercase tracking-[0.2em] text-white/85 sm:text-[1.05rem]">
@@ -113,7 +122,7 @@ export function Hero() {
             </div>
 
             <p
-              className="animate-rise mt-7 max-w-xl text-[0.98rem] leading-[1.75] text-white/60"
+              className="animate-rise mt-7 max-w-xl text-[0.98rem] lg:mt-[2.5svh] leading-[1.75] text-white/60"
               style={rise(0.92, 18, 0.9)}
             >
               22+ years inside the HEINEKEN Group, turning a finance foundation into
@@ -124,7 +133,7 @@ export function Hero() {
             </p>
 
             <div
-              className="animate-rise mt-10 flex flex-wrap items-center gap-3"
+              className="animate-rise mt-10 flex flex-wrap items-center gap-3 lg:mt-[4svh]"
               style={rise(1.04, 18, 0.9)}
             >
               <button
@@ -145,51 +154,89 @@ export function Hero() {
             </div>
           </div>
 
-          {/* ── Right: the ledger ── */}
+          {/* ── Right: the dossier ── */}
           <div
-            className="animate-rise rounded-3xl glass-dark p-7 sm:p-8"
-              style={rise(0.7, 28, 1)}
+            className="animate-rise rounded-3xl glass-dark p-7 sm:p-8 lg:p-[clamp(1.5rem,3.2svh,2rem)]"
+            style={rise(0.7, 28, 1)}
           >
-            <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-white/40">
-              Categories under management
-            </p>
+            {/* Current post */}
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-white/40">
+                  Currently
+                </p>
+                <p className="mt-2.5 font-display text-[1.45rem] leading-tight text-white">
+                  {currentRole.title}
+                </p>
+                <p className="mt-1.5 text-[0.82rem] text-white/50">
+                  {currentRole.company} · since {currentRole.period.split(" — ")[0]}
+                </p>
+              </div>
+              <span
+                className="mt-0.5 shrink-0 rounded-full border px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.16em]"
+                style={{
+                  borderColor: "color-mix(in oklab, var(--gold) 45%, transparent)",
+                  color: "var(--gold)",
+                }}
+              >
+                {currentRole.duration}
+              </span>
+            </div>
 
-            <ul className="mt-6 space-y-0">
-              {categories.map((category, i) => (
-                <li
-                  key={category}
-                  style={{ "--rise-x": "14px", "--rise-y": "0px", animationDuration: "0.7s", animationDelay: `${0.95 + i * 0.07}s` } as CSSProperties}
-                  className="animate-rise flex items-baseline gap-4 border-b border-white/8 py-3 last:border-0"
-                >
-                  <span
-                    className="text-[0.62rem] font-semibold tabular"
+            {/* Career arc: finance foundation → procurement leadership */}
+            <div className="mt-7 border-t border-white/10 pt-6 lg:mt-[2.4svh] lg:pt-[2.4svh]">
+              <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-white/40">
+                Career arc
+              </p>
+              <div className="mt-4 lg:mt-[1.8svh] flex gap-1.5">
+                {arc.map((phase, i) => (
+                  <div key={phase.label} className="min-w-0" style={{ flex: `${phase.years} 1 0` }}>
+                    <span
+                      className="animate-grow-x block h-1.5 rounded-full"
+                      style={{ background: phase.color, animationDelay: `${1 + i * 0.3}s` }}
+                    />
+                    <p className="mt-3 text-[0.82rem] font-medium text-white/80">{phase.label}</p>
+                    <p className="mt-0.5 text-[0.7rem] tabular text-white/40">{phase.span}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Categories */}
+            <div className="mt-7 border-t border-white/10 pt-6 lg:mt-[2.4svh] lg:pt-[2.4svh]">
+              <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-white/40">
+                Categories under management
+              </p>
+              <ul className="mt-4 lg:mt-[1.8svh] flex flex-wrap gap-2">
+                {categories.map((category, i) => (
+                  <li
+                    key={category}
+                    style={rise(0.95 + i * 0.06, 8, 0.6)}
+                    className="animate-rise rounded-full border border-white/10 bg-white/4 px-3 py-1.5 text-[0.76rem] text-white/70"
+                  >
+                    {category}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Credentials */}
+            <div className="mt-7 border-t border-white/10 pt-6 lg:mt-[2.4svh] lg:pt-[2.4svh]">
+              <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-white/40">
+                Credentials
+              </p>
+              <ul className="mt-4 lg:mt-[1.8svh] grid grid-cols-4 gap-2">
+                {credentials.map((c) => (
+                  <li
+                    key={c.abbr}
+                    title={`${c.title}, ${c.institution}`}
+                    className="rounded-xl border border-white/10 py-2.5 text-center font-display text-lg"
                     style={{ color: "var(--gold)" }}
                   >
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="text-[0.92rem] text-white/75">{category}</span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-7 flex items-end justify-between border-t border-white/10 pt-6">
-              <div>
-                <p className="text-[0.62rem] uppercase tracking-[0.2em] text-white/40">
-                  Annual spend
-                </p>
-                <p
-                  className="mt-1.5 font-display text-3xl"
-                  style={{ color: "var(--gold)" }}
-                >
-                  €450M+
-                </p>
-              </div>
-              <div className="text-right">
-                <p className="text-[0.62rem] uppercase tracking-[0.2em] text-white/40">
-                  Suppliers
-                </p>
-                <p className="mt-1.5 font-display text-3xl text-white">1,100+</p>
-              </div>
+                    {c.abbr}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
@@ -199,7 +246,7 @@ export function Hero() {
       <button
         onClick={() => scrollToSection("#about", HEADER_OFFSET)}
         style={rise(1.6, 0, 1)}
-        className="animate-rise absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2.5 text-white/35 transition-colors duration-300 hover:text-white/70"
+        className="animate-rise absolute bottom-8 left-1/2 lg:bottom-[3svh] z-10 flex -translate-x-1/2 flex-col items-center gap-2.5 text-white/35 transition-colors duration-300 hover:text-white/70"
         aria-label="Scroll to about section"
       >
         <span className="text-[0.6rem] uppercase tracking-[0.3em]">Scroll</span>
