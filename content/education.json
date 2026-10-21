@@ -1,0 +1,33 @@
+{
+  "eyebrow": "Education & Qualifications",
+  "title": "Chartered, and",
+  "accent": "commercially trained",
+  "description": "A postgraduate business qualification alongside three professional institute memberships in accounting, taxation and cost management.",
+  "educationLabel": "Education",
+  "education": [
+    {
+      "abbr": "MBA",
+      "title": "Master of Business Administration",
+      "institution": "University of Lagos",
+      "location": "Lagos, Nigeria"
+    }
+  ],
+  "qualificationsLabel": "Professional Qualifications",
+  "certifications": [
+    {
+      "abbr": "FCA",
+      "title": "Fellow",
+      "institution": "Institute of Chartered Accountants of Nigeria"
+    },
+    {
+      "abbr": "ACTI",
+      "title": "Associate",
+      "institution": "Chartered Institute of Taxation of Nigeria"
+    },
+    {
+      "abbr": "ICM",
+      "title": "Associate",
+      "institution": "Institute of Cost Management of Nigeria"
+    }
+  ]
+}

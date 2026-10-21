@@ -1,0 +1,15 @@
+{
+  "eyebrow": "Get in touch",
+  "title": "Let's talk procurement,",
+  "accent": "strategy and value",
+  "description": "Open to strategic procurement conversations, advisory engagements and professional collaboration.",
+  "emailButton": "Send an email",
+  "callButton": "Call now",
+  "cvButton": "Download CV",
+  "channelLabels": {
+    "personalEmail": "Personal Email",
+    "workEmail": "Work Email",
+    "primaryPhone": "Primary Phone",
+    "secondaryPhone": "Secondary Phone"
+  }
+}

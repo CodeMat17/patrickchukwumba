@@ -1,0 +1,59 @@
+{
+  "eyebrow": "Technical Skills",
+  "title": "Where the",
+  "accent": "expertise sits",
+  "description": "Commercial procurement capability built on top of a chartered finance foundation.",
+  "groups": [
+    {
+      "group": "Procurement",
+      "skills": [
+        "Strategic Procurement",
+        "Category Management",
+        "Contract Management",
+        "Supplier Relationship Management",
+        "Commercial Negotiation"
+      ]
+    },
+    {
+      "group": "Supply Chain",
+      "skills": [
+        "Supply Chain Management",
+        "Risk Management",
+        "Procurement Governance",
+        "Business Partnering"
+      ]
+    },
+    {
+      "group": "Financial",
+      "skills": [
+        "Financial Analysis",
+        "Spend Analytics",
+        "Financial Planning & Analysis",
+        "Budgeting"
+      ]
+    }
+  ],
+  "snapshotLabel": "Career Snapshot",
+  "snapshot": [
+    {
+      "area": "Procurement & Category Management",
+      "detail": "Strategic sourcing, tendering, supplier selection, category strategy, commercial negotiation."
+    },
+    {
+      "area": "Contract Management",
+      "detail": "End-to-end contract lifecycle management, governance, supplier performance, SLA implementation."
+    },
+    {
+      "area": "Supply Chain Operations",
+      "detail": "Production materials, logistics, warehousing, energy, MRO, investment projects and supply continuity."
+    },
+    {
+      "area": "Finance & Control",
+      "detail": "Treasury, liquidity, working capital, budgeting, financial control, tax, consolidation and reporting."
+    },
+    {
+      "area": "Leadership",
+      "detail": "Team development, capability building, stakeholder engagement and supplier partnership management."
+    }
+  ]
+}

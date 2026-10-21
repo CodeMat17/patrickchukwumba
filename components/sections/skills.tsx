@@ -1,6 +1,6 @@
 "use client"
 
-import { careerSnapshot, technicalSkills } from "@/lib/cv"
+import { careerSnapshot, skills, technicalSkills } from "@/lib/cv"
 import { Reveal, RevealGroup, RevealItem, SectionHeading } from "@/components/ui/reveal"
 
 export function Skills() {
@@ -8,10 +8,10 @@ export function Skills() {
     <section id="skills" className="scroll-mt-24 py-24 sm:py-36">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <SectionHeading
-          eyebrow="Technical Skills"
-          title="Where the"
-          accent="expertise sits"
-          description="Commercial procurement capability built on top of a chartered finance foundation."
+          eyebrow={skills.eyebrow}
+          title={skills.title}
+          accent={skills.accent}
+          description={skills.description}
         />
 
         {/* ── Technical skills ── */}
@@ -58,7 +58,7 @@ export function Skills() {
         <Reveal direction="up" className="mt-24">
           <div className="flex items-center gap-3">
             <span className="h-px w-8 bg-gold/60" />
-            <span className="eyebrow">Career Snapshot</span>
+            <span className="eyebrow">{skills.snapshotLabel}</span>
           </div>
         </Reveal>
 

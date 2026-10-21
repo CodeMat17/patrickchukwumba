@@ -1,6 +1,6 @@
 "use client"
 
-import { earlierRoles, roles } from "@/lib/cv"
+import { earlierRoles, experience, roles } from "@/lib/cv"
 import { Reveal, RevealGroup, RevealItem, SectionHeading } from "@/components/ui/reveal"
 
 function RoleCard({ role }: { role: (typeof roles)[number] }) {
@@ -47,7 +47,7 @@ function RoleCard({ role }: { role: (typeof roles)[number] }) {
                 className="size-1 rounded-full"
                 style={{ background: "var(--gold)" }}
               />
-              Current
+              {experience.currentBadge}
             </span>
           ) : null}
         </div>
@@ -80,10 +80,10 @@ export function Experience() {
     >
       <div className="mx-auto max-w-5xl px-5 sm:px-8">
         <SectionHeading
-          eyebrow="Professional Experience"
-          title="Two decades of compounding"
-          accent="responsibility"
-          description="A single-company career inside the HEINEKEN Group — from inventory accounting in Ibadan to a €450M+ category portfolio at Lagos headquarters."
+          eyebrow={experience.eyebrow}
+          title={experience.title}
+          accent={experience.accent}
+          description={experience.description}
         />
 
         {/* ── Timeline ── */}
@@ -135,10 +135,10 @@ export function Experience() {
             <div className="flex flex-wrap items-baseline justify-between gap-3">
               <div className="flex items-center gap-3">
                 <span className="h-px w-8 bg-gold/60" />
-                <span className="eyebrow">Earlier Finance Roles</span>
+                <span className="eyebrow">{experience.earlierLabel}</span>
               </div>
               <span className="text-[0.78rem] tabular text-muted-foreground">
-                Nigerian Breweries Plc · 2004 — 2012
+                {experience.earlierCaption}
               </span>
             </div>
           </Reveal>

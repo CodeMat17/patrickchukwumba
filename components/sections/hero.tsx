@@ -2,7 +2,7 @@
 
 import type { CSSProperties } from "react"
 import { ArrowDown, ArrowUpRight, Mail, MapPin } from "lucide-react"
-import { profile, categories, roles, education, certifications } from "@/lib/cv"
+import { profile, hero, categories, roles, education, certifications } from "@/lib/cv"
 import { RevealWords } from "@/components/ui/reveal"
 import { scrollToSection } from "@/lib/smooth-scroll"
 
@@ -16,14 +16,24 @@ const rise = (delay: number, y = 18, duration = 0.9) =>
     animationDelay: `${delay}s`,
   }) as CSSProperties
 
-const currentRole = roles[0]
+const currentRole = roles.find((role) => role.isCurrent) ?? roles[0]
 const credentials = [...education, ...certifications]
 
-/** Finance ran Jul 2004 – Sep 2012; procurement from Oct 2012 to today. */
-const arc = [
-  { label: "Finance & control", span: "2004 — 2012", years: 8.2, color: "rgb(255 255 255 / 0.28)" },
-  { label: "Procurement leadership", span: "2012 — today", years: new Date().getFullYear() - 2012.75, color: "var(--gold)" },
-]
+/** Each phase is sized by its length in years; an empty end year means "to today". The last phase is the gold one. */
+const arc = hero.careerArc.map((phase, i, all) => ({
+  label: phase.label,
+  span: phase.span,
+  years: Math.max(1, (phase.endYear ?? new Date().getFullYear()) - phase.startYear),
+  color: i === all.length - 1 ? "var(--gold)" : "rgb(255 255 255 / 0.28)",
+}))
+
+/** Splits the intro so every phrase listed in `introHighlights` renders bold. */
+function introParts() {
+  const phrases = hero.introHighlights.filter(Boolean)
+  if (phrases.length === 0) return [hero.intro]
+  const escaped = phrases.map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+  return hero.intro.split(new RegExp(`(${escaped.join("|")})`))
+}
 
 export function Hero() {
   // Parallax (content drifts and fades, light pools and grid drift) runs on
@@ -76,13 +86,13 @@ export function Hero() {
             </div>
 
             <h1 className="mt-8 font-display text-[clamp(2.9rem,8.2vw,6.4rem)] leading-[0.94] lg:mt-[3svh] lg:text-[clamp(3.25rem,min(6.4vw,11svh),6.4rem)] text-white">
-              <RevealWords text="Patrick" delay={0.3} />
+              <RevealWords text={hero.nameLine1} delay={0.3} />
               <br />
               <span className="relative inline-block">
                 <RevealWords
-                  text="Chukwumba"
+                  text={hero.nameLine2}
                   delay={0.4}
-                  highlight={["Chukwumba"]}
+                  highlight={hero.nameLine2.split(" ")}
                 />
                 {/* Hand-drawn brass underline, stroked in after the name reveals */}
                 <svg
@@ -104,7 +114,7 @@ export function Hero() {
                 </svg>
               </span>
               <br />
-              <RevealWords text="Okorie" delay={0.5} />
+              <RevealWords text={hero.nameLine3} delay={0.5} />
             </h1>
 
             <div
@@ -125,11 +135,16 @@ export function Hero() {
               className="animate-rise mt-7 max-w-xl text-[0.98rem] lg:mt-[2.5svh] leading-[1.75] text-white/60"
               style={rise(0.92, 18, 0.9)}
             >
-              22+ years inside the HEINEKEN Group, turning a finance foundation into
-              procurement leadership — a{" "}
-              <span className="font-semibold text-white/90">€450M+</span> annual spend
-              portfolio and an ecosystem of{" "}
-              <span className="font-semibold text-white/90">1,100+ suppliers</span>.
+              {introParts().map((part, i) =>
+                // split() with a capture group puts the matched phrases at odd indexes
+                i % 2 === 1 ? (
+                  <span key={i} className="font-semibold text-white/90">
+                    {part}
+                  </span>
+                ) : (
+                  part
+                )
+              )}
             </p>
 
             <div
@@ -140,7 +155,7 @@ export function Hero() {
                 onClick={() => scrollToSection("#experience", HEADER_OFFSET)}
                 className="sheen group inline-flex items-center gap-2 rounded-full gradient-gold px-7 py-3.5 text-[0.85rem] font-semibold text-[oklch(0.16_0.02_265)] shadow-lift transition-transform duration-500 hover:-translate-y-0.5"
               >
-                Explore the career
+                {hero.primaryButton}
                 <ArrowUpRight className="size-4 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </button>
 
@@ -149,7 +164,7 @@ export function Hero() {
                 className="inline-flex items-center gap-2 rounded-full glass-dark px-7 py-3.5 text-[0.85rem] font-semibold text-white transition-colors duration-300 hover:bg-white/15"
               >
                 <Mail className="size-4" />
-                Get in touch
+                {hero.secondaryButton}
               </button>
             </div>
           </div>
@@ -163,13 +178,13 @@ export function Hero() {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-white/40">
-                  Currently
+                  {hero.currentlyLabel}
                 </p>
                 <p className="mt-2.5 font-display text-[1.45rem] leading-tight text-white">
                   {currentRole.title}
                 </p>
                 <p className="mt-1.5 text-[0.82rem] text-white/50">
-                  {currentRole.company} · since {currentRole.period.split(" — ")[0]}
+                  {currentRole.company} · {hero.sinceWord} {currentRole.period.split(/\s+[—–-]\s+/)[0]}
                 </p>
               </div>
               <span
@@ -186,7 +201,7 @@ export function Hero() {
             {/* Career arc: finance foundation → procurement leadership */}
             <div className="mt-7 border-t border-white/10 pt-6 lg:mt-[2.4svh] lg:pt-[2.4svh]">
               <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-white/40">
-                Career arc
+                {hero.careerArcLabel}
               </p>
               <div className="mt-4 lg:mt-[1.8svh] flex gap-1.5">
                 {arc.map((phase, i) => (
@@ -205,7 +220,7 @@ export function Hero() {
             {/* Categories */}
             <div className="mt-7 border-t border-white/10 pt-6 lg:mt-[2.4svh] lg:pt-[2.4svh]">
               <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-white/40">
-                Categories under management
+                {hero.categoriesLabel}
               </p>
               <ul className="mt-4 lg:mt-[1.8svh] flex flex-wrap gap-2">
                 {categories.map((category, i) => (
@@ -223,7 +238,7 @@ export function Hero() {
             {/* Credentials */}
             <div className="mt-7 border-t border-white/10 pt-6 lg:mt-[2.4svh] lg:pt-[2.4svh]">
               <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-white/40">
-                Credentials
+                {hero.credentialsLabel}
               </p>
               <ul className="mt-4 lg:mt-[1.8svh] grid grid-cols-4 gap-2">
                 {credentials.map((c) => (
@@ -249,7 +264,7 @@ export function Hero() {
         className="animate-rise absolute bottom-8 left-1/2 lg:bottom-[3svh] z-10 flex -translate-x-1/2 flex-col items-center gap-2.5 text-white/35 transition-colors duration-300 hover:text-white/70"
         aria-label="Scroll to about section"
       >
-        <span className="text-[0.6rem] uppercase tracking-[0.3em]">Scroll</span>
+        <span className="text-[0.6rem] uppercase tracking-[0.3em]">{hero.scrollLabel}</span>
         <span className="animate-bob">
           <ArrowDown className="size-4" />
         </span>

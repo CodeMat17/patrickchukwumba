@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "value": 22,
+      "prefix": "",
+      "suffix": "+",
+      "label": "Years Experience",
+      "description": "Procurement, supply chain, treasury, financial control and tax — all within the HEINEKEN Group."
+    },
+    {
+      "value": 450,
+      "prefix": "€",
+      "suffix": "M+",
+      "label": "Annual Spend",
+      "description": "Spend portfolio under management across six procurement categories."
+    },
+    {
+      "value": 1100,
+      "prefix": "",
+      "suffix": "+",
+      "label": "Suppliers",
+      "description": "Supplier ecosystem managed for continuity and strategic partnership development."
+    },
+    {
+      "value": 7,
+      "prefix": "",
+      "suffix": "",
+      "label": "Direct Reports",
+      "description": "Procurement and contract management professionals led and developed."
+    }
+  ]
+}

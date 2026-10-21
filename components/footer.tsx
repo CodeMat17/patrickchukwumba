@@ -1,7 +1,7 @@
 "use client"
 
 import { ArrowUp } from "lucide-react"
-import { profile } from "@/lib/cv"
+import { profile, site } from "@/lib/cv"
 import { scrollToTop } from "@/lib/smooth-scroll"
 
 export function Footer() {
@@ -27,7 +27,7 @@ export function Footer() {
             onClick={scrollToTop}
             className="group inline-flex items-center gap-2 rounded-full border border-hairline px-5 py-2.5 text-[0.78rem] font-medium text-muted-foreground transition-colors duration-500 hover:border-gold/40 hover:text-foreground"
           >
-            Back to top
+            {site.footer.backToTop}
             <ArrowUp className="size-3.5 transition-transform duration-500 group-hover:-translate-y-0.5" />
           </button>
         </div>
@@ -36,7 +36,7 @@ export function Footer() {
 
         <div className="flex flex-col items-start justify-between gap-3 text-[0.73rem] text-muted-foreground sm:flex-row sm:items-center">
           <p>
-            © {new Date().getFullYear()} {profile.displayName}. All rights reserved.
+            © {new Date().getFullYear()} {profile.displayName}. {site.footer.rights}
           </p>
           <p>
             {profile.company} · {profile.group}

@@ -1,35 +1,35 @@
 "use client"
 
-import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react"
-import { profile } from "@/lib/cv"
+import { ArrowUpRight, Download, Mail, MapPin, Phone } from "lucide-react"
+import { contact, profile } from "@/lib/cv"
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal"
 
 const channels = [
   {
     icon: Mail,
-    label: "Personal Email",
+    label: contact.channelLabels.personalEmail,
     value: profile.emails.personal,
     href: `mailto:${profile.emails.personal}`,
   },
   {
     icon: Mail,
-    label: "Work Email",
+    label: contact.channelLabels.workEmail,
     value: profile.emails.work,
     href: `mailto:${profile.emails.work}`,
   },
   {
     icon: Phone,
-    label: "Primary Phone",
+    label: contact.channelLabels.primaryPhone,
     value: profile.phones.primary.display,
     href: profile.phones.primary.href,
   },
   {
     icon: Phone,
-    label: "Secondary Phone",
+    label: contact.channelLabels.secondaryPhone,
     value: profile.phones.secondary.display,
     href: profile.phones.secondary.href,
   },
-] as const
+].filter((channel) => channel.value) // a cleared field in the editor hides its card
 
 export function Contact() {
   return (
@@ -49,21 +49,20 @@ export function Contact() {
               <Reveal direction="up">
                 <div className="flex items-center gap-3">
                   <span className="h-px w-8 bg-gold/60" />
-                  <span className="eyebrow">Get in touch</span>
+                  <span className="eyebrow">{contact.eyebrow}</span>
                 </div>
               </Reveal>
 
               <Reveal direction="up" delay={0.08}>
                 <h2 className="mt-6 font-display text-[clamp(2rem,4.2vw,3.2rem)] leading-[1.08] text-white">
-                  Let&apos;s talk procurement,{" "}
-                  <span className="text-gradient-gold">strategy and value</span>.
+                  {contact.title}{" "}
+                  <span className="text-gradient-gold">{contact.accent}</span>.
                 </h2>
               </Reveal>
 
               <Reveal direction="up" delay={0.14}>
                 <p className="mt-6 max-w-md text-[0.96rem] leading-[1.8] text-white/55">
-                  Open to strategic procurement conversations, advisory engagements and
-                  professional collaboration.
+                  {contact.description}
                 </p>
               </Reveal>
 
@@ -73,7 +72,7 @@ export function Contact() {
                     href={`mailto:${profile.emails.personal}`}
                     className="sheen group inline-flex items-center gap-2 rounded-full gradient-gold px-7 py-3.5 text-[0.85rem] font-semibold text-[oklch(0.16_0.02_265)] shadow-lift transition-transform duration-500 hover:-translate-y-0.5"
                   >
-                    Send an email
+                    {contact.emailButton}
                     <ArrowUpRight className="size-4 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </a>
                   <a
@@ -81,8 +80,18 @@ export function Contact() {
                     className="inline-flex items-center gap-2 rounded-full glass-dark px-7 py-3.5 text-[0.85rem] font-semibold text-white transition-colors duration-300 hover:bg-white/15"
                   >
                     <Phone className="size-4" />
-                    Call now
+                    {contact.callButton}
                   </a>
+                  {profile.cvUrl ? (
+                    <a
+                      href={profile.cvUrl}
+                      download
+                      className="inline-flex items-center gap-2 rounded-full glass-dark px-7 py-3.5 text-[0.85rem] font-semibold text-white transition-colors duration-300 hover:bg-white/15"
+                    >
+                      <Download className="size-4" />
+                      {contact.cvButton}
+                    </a>
+                  ) : null}
                 </div>
               </Reveal>
 

@@ -4,13 +4,14 @@ import { useEffect, useState, useSyncExternalStore, type CSSProperties } from "r
 import { useTheme } from "next-themes"
 import { Moon, Sun, Menu, X } from "lucide-react"
 import { scrollToSection, scrollToTop } from "@/lib/smooth-scroll"
+import { profile, site } from "@/lib/cv"
 
 const navLinks = [
-  { label: "About", href: "#about" },
-  { label: "Experience", href: "#experience" },
-  { label: "Expertise", href: "#skills" },
-  { label: "Credentials", href: "#education" },
-  { label: "Contact", href: "#contact" },
+  { label: site.nav.about, href: "#about" },
+  { label: site.nav.experience, href: "#experience" },
+  { label: site.nav.skills, href: "#skills" },
+  { label: site.nav.education, href: "#education" },
+  { label: site.nav.contact, href: "#contact" },
 ]
 
 const HEADER_OFFSET = 88
@@ -139,21 +140,21 @@ export function Navbar() {
               onClick={scrollToTop}
               className='group flex items-center gap-3'>
               <span aria-hidden className='grid size-9 place-items-center rounded-xl gradient-gold text-[0.7rem] font-bold tracking-tight text-[oklch(0.16_0.02_265)] shadow-soft transition-transform duration-500 group-hover:scale-105'>
-                PC
+                {profile.monogram}
               </span>
               <span className='flex flex-col text-start leading-none'>
                 <span
                   className={`font-display text-[0.95rem] transition-colors duration-500 ${
                     onDark ? "text-white" : "text-foreground"
                   }`}>
-                  Patrick Chukwumba
+                  {profile.shortName}
                 </span>
 
                 <span
                   className={`mt-1 text-[0.58rem] uppercase tracking-[0.2em] transition-colors duration-500 ${
                     onDark ? "text-white/45" : "text-muted-foreground"
                   }`}>
-                  Supply Chain
+                  {profile.tagline}
                   <span className='sr-only'> — back to top</span>
                 </span>
               </span>
@@ -192,13 +193,13 @@ export function Navbar() {
 
             <div className='flex items-center gap-2'>
               <a
-                href='mailto:Talk2pat0791@gmail.com'
+                href={`mailto:${profile.emails.personal}`}
                 className={`hidden rounded-full px-5 py-2.5 text-[0.8rem] font-semibold transition-all duration-500 sm:inline-flex ${
                   onDark
                     ? "bg-white/10 text-white ring-1 ring-white/20 hover:bg-white/16"
                     : "gradient-gold text-[oklch(0.16_0.02_265)] shadow-soft hover:shadow-lift"
                 }`}>
-                Let&apos;s talk
+                {site.nav.cta}
               </a>
 
               <ThemeToggle onDark={onDark} />
@@ -248,10 +249,10 @@ export function Navbar() {
               ))}
 
               <a
-                href='mailto:Talk2pat0791@gmail.com'
+                href={`mailto:${profile.emails.personal}`}
                 style={{ "--rise-y": "24px", animationDuration: "0.5s", animationDelay: "0.42s" } as CSSProperties}
                 className='animate-rise mt-10 inline-flex items-center justify-center rounded-full gradient-gold px-6 py-3.5 text-sm font-semibold text-[oklch(0.16_0.02_265)]'>
-                Talk2pat0791@gmail.com
+                {profile.emails.personal}
               </a>
             </div>
           </div>

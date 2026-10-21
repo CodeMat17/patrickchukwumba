@@ -1,0 +1,128 @@
+{
+  "eyebrow": "Professional Experience",
+  "title": "Two decades of compounding",
+  "accent": "responsibility",
+  "description": "A single-company career inside the HEINEKEN Group — from inventory accounting in Ibadan to a €450M+ category portfolio at Lagos headquarters.",
+  "currentBadge": "Current",
+  "roles": [
+    {
+      "title": "Supply Chain Category Manager",
+      "company": "Nigerian Breweries Plc",
+      "location": "Lagos Headquarters",
+      "period": "November 2021 — Present",
+      "duration": "4+ years",
+      "isCurrent": true,
+      "points": [
+        "Manage Strategic Sourcing and Category Management activities across €450M+ annual spend.",
+        "Supplier portfolio of over 1,100 suppliers covering Production Materials, Logistics, Energy, MRO, Warehousing, and Capital Projects.",
+        "Develop and implement sourcing strategies that deliver cost optimization, supply continuity, and risk mitigation.",
+        "Ensure compliance with procurement governance, contracting standards, and Source-to-Pay policies.",
+        "Lead procurement capability development and mentor category teams."
+      ]
+    },
+    {
+      "title": "Manager, Contract Management",
+      "company": "Nigerian Breweries Plc",
+      "location": "Lagos Headquarters",
+      "period": "October 2018 — October 2021",
+      "duration": "3 years 11 months",
+      "isCurrent": false,
+      "points": [
+        "Led end-to-end contract lifecycle management across multiple procurement categories.",
+        "Managed supplier performance, contract governance, and stakeholder engagement for over 1,000 suppliers.",
+        "Served as key interface between local operations and HEINEKEN Global Procurement.",
+        "Led and developed a team of seven procurement professionals."
+      ]
+    },
+    {
+      "title": "Category Buyer, Supply Chain Services & Projects",
+      "company": "Nigerian Breweries Plc",
+      "location": "Lagos Headquarters",
+      "period": "August 2017 — October 2018",
+      "duration": "1 year 2 months",
+      "isCurrent": false,
+      "points": [
+        "Managed procurement for Capital Investment Projects, Logistics, and Warehousing categories.",
+        "Partnered with Supply Chain Project Teams to deliver investment projects across multiple brewery locations.",
+        "Led sourcing, contracting, and supplier management activities to support project execution and operational efficiency.",
+        "Pioneer member of the Fixed & Variable Truck Scheme, supporting fleet availability and distribution continuity.",
+        "Collaborated with Distribution teams to ensure uninterrupted truck operations and product delivery."
+      ]
+    },
+    {
+      "title": "Contract Manager, Production Materials",
+      "company": "Nigerian Breweries Plc",
+      "location": "Lagos Headquarters",
+      "period": "March 2015 — July 2017",
+      "duration": "2 years 4 months",
+      "isCurrent": false,
+      "points": [
+        "Ensured uninterrupted supply of production materials through effective stakeholder management and proactive resolution of supply chain risks.",
+        "Served as the primary interface with HEINEKEN Global Category Buyers, enabling seamless execution of global contracts and consistent material availability.",
+        "Strengthened collaboration between suppliers, procurement, and operational teams, improving contract compliance, supplier performance, and service delivery.",
+        "Provided Global and Local Buyers with OpCo-specific contract requirements and commercial information to support contracting and SLA implementation."
+      ]
+    },
+    {
+      "title": "Category Buyer, Production Materials",
+      "company": "Nigerian Breweries Plc",
+      "location": "Lagos Headquarters",
+      "period": "May 2013 — February 2015",
+      "duration": "2 years 4 months",
+      "isCurrent": false,
+      "points": [
+        "Managed sourcing and category strategies for all locally sourced production materials, including raw and packaging materials, ensuring uninterrupted supply to brewery operations.",
+        "Led tendering, supplier selection, and commercial negotiations, delivering cost savings while meeting quality and service requirements.",
+        "Identified and executed value creation opportunities across production material categories, improving procurement efficiency and supplier performance.",
+        "Collaborated with cross-functional teams to ensure continuity of production through effective demand planning, contract management, and supplier performance monitoring."
+      ]
+    },
+    {
+      "title": "Category Buyer, Business Services",
+      "company": "Nigerian Breweries Plc",
+      "location": "Lagos Headquarters",
+      "period": "October 2012 — April 2013",
+      "duration": "6 months",
+      "isCurrent": false,
+      "points": [
+        "Led sourcing and category management for Business Services & Commerce categories, ensuring uninterrupted supply and service delivery while achieving cost, quality, and compliance objectives.",
+        "Leveraged a unique combination of procurement and finance expertise to optimize commercial decisions, strengthen business cases, and deliver sustainable savings.",
+        "Combined procurement and financial expertise to drive commercial value, strengthen governance, and support informed decision-making."
+      ]
+    }
+  ],
+  "earlierLabel": "Earlier Finance Roles",
+  "earlierCaption": "Nigerian Breweries Plc · 2004 — 2012",
+  "earlierRoles": [
+    {
+      "title": "Bank Operations Manager",
+      "location": "Lagos Headquarters",
+      "period": "Mar 2010 — Sep 2012",
+      "point": "Managed treasury operations, liquidity planning, banking relationships, and working capital optimization."
+    },
+    {
+      "title": "Tax & Consolidation Manager",
+      "location": "Lagos Headquarters",
+      "period": "Aug 2008 — Feb 2010",
+      "point": "Led financial consolidations, tax compliance, statutory reporting, and audit coordination."
+    },
+    {
+      "title": "Business Unit Controller",
+      "location": "South Business Unit",
+      "period": "Jun 2007 — Jul 2008",
+      "point": "Drove budgeting, financial planning, cost control, and performance management initiatives."
+    },
+    {
+      "title": "Financial Accountant",
+      "location": "Ibadan Brewery",
+      "period": "Dec 2006 — May 2007",
+      "point": "Managed financial reporting, reconciliations, and governance processes."
+    },
+    {
+      "title": "Inventory Accountant",
+      "location": "Ibadan Brewery",
+      "period": "Jul 2004 — Nov 2006",
+      "point": "Managed inventory controls, reconciliations, payroll accounting, and governance processes."
+    }
+  ]
+}

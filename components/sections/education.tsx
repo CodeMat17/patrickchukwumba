@@ -1,7 +1,7 @@
 "use client"
 
 import { Award, GraduationCap } from "lucide-react"
-import { certifications, education } from "@/lib/cv"
+import { certifications, education, educationSection } from "@/lib/cv"
 import { RevealGroup, RevealItem, SectionHeading } from "@/components/ui/reveal"
 
 export function Education() {
@@ -12,10 +12,10 @@ export function Education() {
     >
       <div className="mx-auto max-w-5xl px-5 sm:px-8">
         <SectionHeading
-          eyebrow="Education & Qualifications"
-          title="Chartered, and"
-          accent="commercially trained"
-          description="A postgraduate business qualification alongside three professional institute memberships in accounting, taxation and cost management."
+          eyebrow={educationSection.eyebrow}
+          title={educationSection.title}
+          accent={educationSection.accent}
+          description={educationSection.description}
         />
 
         <RevealGroup stagger={0.1} className="mt-20 grid gap-6 md:grid-cols-2">
@@ -32,7 +32,7 @@ export function Education() {
                   <GraduationCap className="size-[1.05rem]" style={{ color: "var(--gold)" }} />
                 </span>
                 <h3 className="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                  Education
+                  {educationSection.educationLabel}
                 </h3>
               </div>
 
@@ -75,7 +75,7 @@ export function Education() {
                   <Award className="size-[1.05rem]" style={{ color: "var(--gold)" }} />
                 </span>
                 <h3 className="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                  Professional Qualifications
+                  {educationSection.qualificationsLabel}
                 </h3>
               </div>
 

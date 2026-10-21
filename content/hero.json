@@ -1,0 +1,27 @@
+{
+  "nameLine1": "Patrick",
+  "nameLine2": "Chukwumba",
+  "nameLine3": "Okorie",
+  "intro": "22+ years inside the HEINEKEN Group, turning a finance foundation into procurement leadership — a €450M+ annual spend portfolio and an ecosystem of 1,100+ suppliers.",
+  "introHighlights": ["€450M+", "1,100+ suppliers"],
+  "primaryButton": "Explore the career",
+  "secondaryButton": "Get in touch",
+  "currentlyLabel": "Currently",
+  "sinceWord": "since",
+  "careerArcLabel": "Career arc",
+  "careerArc": [
+    { "label": "Finance & control", "span": "2004 — 2012", "startYear": 2004, "endYear": 2012 },
+    { "label": "Procurement leadership", "span": "2012 — today", "startYear": 2012, "endYear": null }
+  ],
+  "categoriesLabel": "Categories under management",
+  "categories": [
+    "Production Materials",
+    "Logistics",
+    "Warehousing",
+    "Energy",
+    "MRO",
+    "Capital Projects"
+  ],
+  "credentialsLabel": "Credentials",
+  "scrollLabel": "Scroll"
+}

@@ -6,12 +6,13 @@ import { Camera } from "lucide-react"
 import { profile } from "@/lib/cv"
 
 /**
- * Portrait frame for `/public/profile.jpg`.
+ * Portrait frame for the photo uploaded in the editor (`content/profile.json`).
  * Falls back to a monogram plate when the file is absent, so the layout never
  * collapses into a broken-image box.
  */
 export function ProfilePhoto({ className = "" }: { className?: string }) {
   const [hasError, setHasError] = useState(false)
+  const photo = profile.photoUrl
 
   return (
     <div className={`group relative ${className}`}>
@@ -23,9 +24,9 @@ export function ProfilePhoto({ className = "" }: { className?: string }) {
       />
 
       <div className="relative h-full w-full overflow-hidden rounded-[1.75rem] border border-hairline bg-[var(--surface-2)] shadow-lift">
-        {!hasError ? (
+        {photo && !hasError ? (
           <Image
-            src="/profile.jpg"
+            src={photo}
             alt={profile.displayName}
             fill
             sizes="(max-width: 1024px) 100vw, 420px"
@@ -42,7 +43,7 @@ export function ProfilePhoto({ className = "" }: { className?: string }) {
                 boxShadow: "0 0 0 6px oklch(1 0 0 / 6%)",
               }}
             >
-              PCO
+              {profile.monogram}
             </div>
 
             <div className="px-6 text-center">
@@ -54,7 +55,7 @@ export function ProfilePhoto({ className = "" }: { className?: string }) {
 
             <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-white/20 px-3 py-1.5 text-[0.68rem] text-white/40">
               <Camera className="size-3" />
-              Add public/profile.jpg
+              Add a photo in the editor
             </span>
           </div>
         )}

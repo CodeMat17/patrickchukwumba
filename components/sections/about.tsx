@@ -2,6 +2,7 @@
 
 import { Check } from "lucide-react"
 import {
+  about,
   careerHighlights,
   coreCompetencies,
   profile,
@@ -10,11 +11,11 @@ import { ProfilePhoto } from "@/components/profile-photo"
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal"
 
 const facts = [
-  { label: "Current role", value: profile.currentRole },
-  { label: "Organisation", value: profile.company },
-  { label: "Group", value: profile.group },
-  { label: "Based in", value: profile.location },
-] as const
+  { label: about.factLabels.currentRole, value: profile.currentRole },
+  { label: about.factLabels.company, value: profile.company },
+  { label: about.factLabels.group, value: profile.group },
+  { label: about.factLabels.location, value: profile.location },
+]
 
 export function About() {
   return (
@@ -51,14 +52,14 @@ export function About() {
             <Reveal direction="up">
               <div className="flex items-center gap-3">
                 <span className="h-px w-8 bg-gold/60" />
-                <span className="eyebrow">Professional Summary</span>
+                <span className="eyebrow">{about.eyebrow}</span>
               </div>
             </Reveal>
 
             <Reveal direction="up" delay={0.08}>
               <h2 className="mt-6 font-display text-[clamp(1.9rem,3.6vw,2.9rem)] leading-[1.14] text-foreground">
-                A finance foundation turned into{" "}
-                <span className="text-gradient-gold">procurement leadership</span>.
+                {about.title}{" "}
+                <span className="text-gradient-gold">{about.accent}</span>.
               </h2>
             </Reveal>
 
@@ -78,7 +79,7 @@ export function About() {
             <Reveal direction="up" delay={0.26}>
               <div className="mt-14 flex items-center gap-3">
                 <span className="h-px w-8 bg-gold/60" />
-                <span className="eyebrow">Core Competencies</span>
+                <span className="eyebrow">{about.competenciesLabel}</span>
               </div>
             </Reveal>
 
@@ -105,7 +106,7 @@ export function About() {
             <Reveal direction="up" delay={0.1}>
               <div className="mt-16 flex items-center gap-3">
                 <span className="h-px w-8 bg-gold/60" />
-                <span className="eyebrow">Selected Career Highlights</span>
+                <span className="eyebrow">{about.highlightsLabel}</span>
               </div>
             </Reveal>
 
