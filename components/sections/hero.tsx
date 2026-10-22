@@ -2,7 +2,8 @@
 
 import type { CSSProperties } from "react"
 import { ArrowDown, ArrowUpRight, Mail, MapPin } from "lucide-react"
-import { profile, hero, categories, roles, education, certifications } from "@/lib/cv"
+import type { Content } from "@/lib/cv"
+import { useContent } from "@/components/content-provider"
 import { RevealWords } from "@/components/ui/reveal"
 import { scrollToSection } from "@/lib/smooth-scroll"
 
@@ -16,19 +17,17 @@ const rise = (delay: number, y = 18, duration = 0.9) =>
     animationDelay: `${delay}s`,
   }) as CSSProperties
 
-const currentRole = roles.find((role) => role.isCurrent) ?? roles[0]
-const credentials = [...education, ...certifications]
-
 /** Each phase is sized by its length in years; an empty end year means "to today". The last phase is the gold one. */
-const arc = hero.careerArc.map((phase, i, all) => ({
-  label: phase.label,
-  span: phase.span,
-  years: Math.max(1, (phase.endYear ?? new Date().getFullYear()) - phase.startYear),
-  color: i === all.length - 1 ? "var(--gold)" : "rgb(255 255 255 / 0.28)",
-}))
+const careerArc = (hero: Content["hero"]) =>
+  hero.careerArc.map((phase, i, all) => ({
+    label: phase.label,
+    span: phase.span,
+    years: Math.max(1, (phase.endYear ?? new Date().getFullYear()) - phase.startYear),
+    color: i === all.length - 1 ? "var(--gold)" : "rgb(255 255 255 / 0.28)",
+  }))
 
 /** Splits the intro so every phrase listed in `introHighlights` renders bold. */
-function introParts() {
+function introParts(hero: Content["hero"]) {
   const phrases = hero.introHighlights.filter(Boolean)
   if (phrases.length === 0) return [hero.intro]
   const escaped = phrases.map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
@@ -36,6 +35,11 @@ function introParts() {
 }
 
 export function Hero() {
+  const { profile, hero, categories, roles, education, certifications } = useContent()
+  const currentRole = roles.find((role) => role.isCurrent) ?? roles[0]
+  const credentials = [...education, ...certifications]
+  const arc = careerArc(hero)
+
   // Parallax (content drifts and fades, light pools and grid drift) runs on
   // CSS scroll timeline — see the `parallax-*` classes in globals.css.
   return (
@@ -135,7 +139,7 @@ export function Hero() {
               className="animate-rise mt-7 max-w-xl text-[0.98rem] lg:mt-[2.5svh] leading-[1.75] text-white/60"
               style={rise(0.92, 18, 0.9)}
             >
-              {introParts().map((part, i) =>
+              {introParts(hero).map((part, i) =>
                 // split() with a capture group puts the matched phrases at odd indexes
                 i % 2 === 1 ? (
                   <span key={i} className="font-semibold text-white/90">

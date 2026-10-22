@@ -1,23 +1,19 @@
 "use client"
 
 import { Check } from "lucide-react"
-import {
-  about,
-  careerHighlights,
-  coreCompetencies,
-  profile,
-} from "@/lib/cv"
+import { useContent } from "@/components/content-provider"
 import { ProfilePhoto } from "@/components/profile-photo"
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal"
 
-const facts = [
-  { label: about.factLabels.currentRole, value: profile.currentRole },
-  { label: about.factLabels.company, value: profile.company },
-  { label: about.factLabels.group, value: profile.group },
-  { label: about.factLabels.location, value: profile.location },
-]
-
 export function About() {
+  const { about, careerHighlights, coreCompetencies, profile } = useContent()
+  const facts = [
+    { label: about.factLabels.currentRole, value: profile.currentRole },
+    { label: about.factLabels.company, value: profile.company },
+    { label: about.factLabels.group, value: profile.group },
+    { label: about.factLabels.location, value: profile.location },
+  ]
+
   return (
     <section id="about" className="scroll-mt-24 py-24 sm:py-36">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">

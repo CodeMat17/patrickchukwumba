@@ -1,10 +1,11 @@
 "use client"
 
 import { Award, GraduationCap } from "lucide-react"
-import { certifications, education, educationSection } from "@/lib/cv"
+import { useContent } from "@/components/content-provider"
 import { RevealGroup, RevealItem, SectionHeading } from "@/components/ui/reveal"
 
 export function Education() {
+  const { certifications, education, educationSection } = useContent()
   return (
     <section
       id="education"

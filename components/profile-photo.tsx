@@ -3,14 +3,15 @@
 import Image from "next/image"
 import { useState } from "react"
 import { Camera } from "lucide-react"
-import { profile } from "@/lib/cv"
+import { useContent } from "@/components/content-provider"
 
 /**
- * Portrait frame for the photo uploaded in the editor (`content/profile.json`).
+ * Portrait frame for the photo uploaded in the dashboard.
  * Falls back to a monogram plate when the file is absent, so the layout never
  * collapses into a broken-image box.
  */
 export function ProfilePhoto({ className = "" }: { className?: string }) {
+  const { profile } = useContent()
   const [hasError, setHasError] = useState(false)
   const photo = profile.photoUrl
 
@@ -55,7 +56,7 @@ export function ProfilePhoto({ className = "" }: { className?: string }) {
 
             <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-white/20 px-3 py-1.5 text-[0.68rem] text-white/40">
               <Camera className="size-3" />
-              Add a photo in the editor
+              Add a photo in the dashboard
             </span>
           </div>
         )}

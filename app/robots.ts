@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/keystatic", "/api/keystatic"],
+      disallow: ["/dashboard"],
     },
     sitemap: "https://patrickchukwumba.com/sitemap.xml",
   }

@@ -1,10 +1,11 @@
 "use client"
 
 import { ArrowUp } from "lucide-react"
-import { profile, site } from "@/lib/cv"
+import { useContent } from "@/components/content-provider"
 import { scrollToTop } from "@/lib/smooth-scroll"
 
 export function Footer() {
+  const { profile, site } = useContent()
   return (
     <footer className="border-t border-hairline bg-[var(--surface-2)]">
       <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8">

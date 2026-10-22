@@ -4,15 +4,15 @@ import { useEffect, useState, useSyncExternalStore, type CSSProperties } from "r
 import { useTheme } from "next-themes"
 import { Moon, Sun, Menu, X } from "lucide-react"
 import { scrollToSection, scrollToTop } from "@/lib/smooth-scroll"
-import { profile, site } from "@/lib/cv"
+import { useContent } from "@/components/content-provider"
 
-const navLinks = [
-  { label: site.nav.about, href: "#about" },
-  { label: site.nav.experience, href: "#experience" },
-  { label: site.nav.skills, href: "#skills" },
-  { label: site.nav.education, href: "#education" },
-  { label: site.nav.contact, href: "#contact" },
-]
+const navItems = [
+  { key: "about", href: "#about" },
+  { key: "experience", href: "#experience" },
+  { key: "skills", href: "#skills" },
+  { key: "education", href: "#education" },
+  { key: "contact", href: "#contact" },
+] as const
 
 const HEADER_OFFSET = 88
 
@@ -33,7 +33,7 @@ function useActiveSection() {
   const [active, setActive] = useState<string>("")
 
   useEffect(() => {
-    const sections = navLinks
+    const sections = navItems
       .map((link) => document.querySelector(link.href))
       .filter((el): el is Element => el !== null)
 
@@ -91,6 +91,8 @@ function ThemeToggle({ onDark }: { onDark: boolean }) {
 }
 
 export function Navbar() {
+  const { profile, site } = useContent()
+  const navLinks = navItems.map((item) => ({ label: site.nav[item.key], href: item.href }))
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const active = useActiveSection()

@@ -1,9 +1,11 @@
 "use client"
 
-import { earlierRoles, experience, roles } from "@/lib/cv"
+import type { Role } from "@/lib/cv"
+import { useContent } from "@/components/content-provider"
 import { Reveal, RevealGroup, RevealItem, SectionHeading } from "@/components/ui/reveal"
 
-function RoleCard({ role }: { role: (typeof roles)[number] }) {
+function RoleCard({ role }: { role: Role }) {
+  const { experience } = useContent()
   return (
     <div
       className={`lift rounded-2xl p-6 sm:p-7 ${
@@ -73,6 +75,7 @@ function RoleCard({ role }: { role: (typeof roles)[number] }) {
 }
 
 export function Experience() {
+  const { earlierRoles, experience, roles } = useContent()
   return (
     <section
       id="experience"

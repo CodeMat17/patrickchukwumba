@@ -2,7 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Nunito } from "next/font/google";
 import "../globals.css";
 import { Providers } from "@/components/providers";
-import { certifications, education, profile, site } from "@/lib/cv";
+import { ContentProvider } from "@/components/content-provider";
+import { getContent } from "@/lib/content";
+import type { Content } from "@/lib/cv";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -25,71 +27,74 @@ export const viewport: Viewport = {
   ],
 };
 
-const [firstName, ...otherNames] = profile.displayName.split(" ");
+export async function generateMetadata(): Promise<Metadata> {
+  const { profile, site } = await getContent();
+  const [firstName, ...otherNames] = profile.displayName.split(" ");
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  return {
+    metadataBase: new URL(siteUrl),
 
-  title: {
-    default: site.searchTitle,
-    template: `%s | ${profile.displayName}`,
-  },
+    title: {
+      default: site.searchTitle,
+      template: `%s | ${profile.displayName}`,
+    },
 
-  description: site.searchDescription,
+    description: site.searchDescription,
 
-  keywords: site.keywords,
+    keywords: site.keywords,
 
-  authors: [{ name: profile.displayName, url: siteUrl }],
-  creator: profile.displayName,
-  publisher: profile.displayName,
+    authors: [{ name: profile.displayName, url: siteUrl }],
+    creator: profile.displayName,
+    publisher: profile.displayName,
 
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+    robots: {
       index: true,
       follow: true,
-      "max-snippet": -1,
-      "max-image-preview": "large",
-      "max-video-preview": -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-snippet": -1,
+        "max-image-preview": "large",
+        "max-video-preview": -1,
+      },
     },
-  },
 
-  alternates: {
-    canonical: siteUrl,
-  },
+    alternates: {
+      canonical: siteUrl,
+    },
 
-  openGraph: {
-    type: "profile",
-    locale: "en_NG",
-    url: siteUrl,
-    siteName: profile.displayName,
-    title: site.searchTitle,
-    description: site.shareDescription,
-    firstName,
-    lastName: otherNames.join(" "),
-    username: "patrickchukwumba",
-    gender: "male",
-  },
+    openGraph: {
+      type: "profile",
+      locale: "en_NG",
+      url: siteUrl,
+      siteName: profile.displayName,
+      title: site.searchTitle,
+      description: site.shareDescription,
+      firstName,
+      lastName: otherNames.join(" "),
+      username: "patrickchukwumba",
+      gender: "male",
+    },
 
-  twitter: {
-    card: "summary_large_image",
-    title: site.shareTitle,
-    description: site.shareDescription,
-    creator: "@patrickchukwumba",
-  },
+    twitter: {
+      card: "summary_large_image",
+      title: site.shareTitle,
+      description: site.shareDescription,
+      creator: "@patrickchukwumba",
+    },
 
-  category: "professional profile",
-};
+    category: "professional profile",
+  };
+}
 
-const jsonLd = {
+const personJsonLd = ({ profile, site, education, certifications }: Content) => ({
   "@context": "https://schema.org",
   "@type": "Person",
   name: profile.displayName,
-  alternateName: [profile.shortName, profile.name],
+  alternateName: profile.shortName,
   description: site.shareDescription,
   url: siteUrl,
-  image: profile.photoUrl ? `${siteUrl}${profile.photoUrl}` : `${siteUrl}/opengraph-image.jpg`,
+  image: new URL(profile.photoUrl ?? "/opengraph-image.jpg", siteUrl).href,
   email: [profile.emails.personal, profile.emails.work].filter(Boolean),
   telephone: [profile.phones.primary.href, profile.phones.secondary.href]
     .filter((href) => href !== "tel:")
@@ -122,13 +127,16 @@ const jsonLd = {
   })),
   knowsAbout: site.expertiseTopics,
   sameAs: [siteUrl],
-};
+});
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const content = await getContent();
+  const jsonLd = personJsonLd(content);
+
   return (
     <html
       lang="en"
@@ -142,7 +150,9 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col">
-        <Providers>{children}</Providers>
+        <Providers>
+          <ContentProvider value={content}>{children}</ContentProvider>
+        </Providers>
       </body>
     </html>
   );

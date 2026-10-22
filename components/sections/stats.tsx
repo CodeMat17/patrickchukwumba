@@ -1,9 +1,10 @@
 "use client"
 
-import { stats } from "@/lib/cv"
+import { useContent } from "@/components/content-provider"
 import { Counter, RevealGroup, RevealItem } from "@/components/ui/reveal"
 
 export function Stats() {
+  const { stats } = useContent()
   return (
     <section className="relative border-b border-hairline bg-background">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">

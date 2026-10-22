@@ -1,9 +1,10 @@
 "use client"
 
-import { careerSnapshot, skills, technicalSkills } from "@/lib/cv"
+import { useContent } from "@/components/content-provider"
 import { Reveal, RevealGroup, RevealItem, SectionHeading } from "@/components/ui/reveal"
 
 export function Skills() {
+  const { careerSnapshot, skills, technicalSkills } = useContent()
   return (
     <section id="skills" className="scroll-mt-24 py-24 sm:py-36">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">

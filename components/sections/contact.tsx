@@ -1,37 +1,38 @@
 "use client"
 
-import { ArrowUpRight, Download, Mail, MapPin, Phone } from "lucide-react"
-import { contact, profile } from "@/lib/cv"
+import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react"
+import { useContent } from "@/components/content-provider"
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal"
 
-const channels = [
-  {
-    icon: Mail,
-    label: contact.channelLabels.personalEmail,
-    value: profile.emails.personal,
-    href: `mailto:${profile.emails.personal}`,
-  },
-  {
-    icon: Mail,
-    label: contact.channelLabels.workEmail,
-    value: profile.emails.work,
-    href: `mailto:${profile.emails.work}`,
-  },
-  {
-    icon: Phone,
-    label: contact.channelLabels.primaryPhone,
-    value: profile.phones.primary.display,
-    href: profile.phones.primary.href,
-  },
-  {
-    icon: Phone,
-    label: contact.channelLabels.secondaryPhone,
-    value: profile.phones.secondary.display,
-    href: profile.phones.secondary.href,
-  },
-].filter((channel) => channel.value) // a cleared field in the editor hides its card
-
 export function Contact() {
+  const { contact, profile } = useContent()
+  const channels = [
+    {
+      icon: Mail,
+      label: contact.channelLabels.personalEmail,
+      value: profile.emails.personal,
+      href: `mailto:${profile.emails.personal}`,
+    },
+    {
+      icon: Mail,
+      label: contact.channelLabels.workEmail,
+      value: profile.emails.work,
+      href: `mailto:${profile.emails.work}`,
+    },
+    {
+      icon: Phone,
+      label: contact.channelLabels.primaryPhone,
+      value: profile.phones.primary.display,
+      href: profile.phones.primary.href,
+    },
+    {
+      icon: Phone,
+      label: contact.channelLabels.secondaryPhone,
+      value: profile.phones.secondary.display,
+      href: profile.phones.secondary.href,
+    },
+  ].filter((channel) => channel.value) // a cleared field in the dashboard hides its card
+
   return (
     <section id="contact" className="scroll-mt-24 py-24 sm:py-36">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
@@ -82,16 +83,6 @@ export function Contact() {
                     <Phone className="size-4" />
                     {contact.callButton}
                   </a>
-                  {profile.cvUrl ? (
-                    <a
-                      href={profile.cvUrl}
-                      download
-                      className="inline-flex items-center gap-2 rounded-full glass-dark px-7 py-3.5 text-[0.85rem] font-semibold text-white transition-colors duration-300 hover:bg-white/15"
-                    >
-                      <Download className="size-4" />
-                      {contact.cvButton}
-                    </a>
-                  ) : null}
                 </div>
               </Reveal>
 

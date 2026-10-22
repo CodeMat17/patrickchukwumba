@@ -20,6 +20,33 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Editing dashboard
+
+All page content is edited at `/dashboard`. **Clerk** signs people in; **Convex** stores the content and decides who may edit it.
+
+- `lib/content-schema.ts` — every editable field. The dashboard forms and Convex's validation are both generated from it.
+- `content/*.json` — default text, used for any section that hasn't been saved in the dashboard yet.
+- `convex/auth.ts` — the editor allowlist (`ADMIN_EMAILS`).
+
+### Setup
+
+1. `npx convex dev` — log in and create/link a Convex project. It writes `NEXT_PUBLIC_CONVEX_URL` to `.env.local`.
+2. In Clerk, create an application, then enable the Convex integration (Clerk dashboard → Integrations → Convex). Copy the Frontend API URL.
+3. Add the Clerk keys to `.env.local` (and to Vercel):
+   ```
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
+   CLERK_SECRET_KEY=sk_...
+   ```
+4. On the Convex deployment (dashboard → Settings → Environment Variables, or `npx convex env set`):
+   ```
+   CLERK_JWT_ISSUER_DOMAIN=https://<your-app>.clerk.accounts.dev
+   ADMIN_EMAILS=talk2pat0791@gmail.com
+   ```
+   `ADMIN_EMAILS` is a comma-separated list. Anyone else who signs in is told they can't edit.
+5. For production, deploy Convex with `npx convex deploy` and set `NEXT_PUBLIC_CONVEX_URL` on Vercel to the production deployment URL (or use Convex's Vercel build command).
+
+Saving in the dashboard refreshes the public site immediately; it also re-checks Convex hourly.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
