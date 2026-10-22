@@ -86,17 +86,7 @@ export function Contact() {
                 </div>
               </Reveal>
 
-              <Reveal direction="up" delay={0.26}>
-                <div className="mt-10 flex items-start gap-3 border-t border-white/10 pt-7">
-                  <MapPin
-                    className="mt-0.5 size-4 shrink-0"
-                    style={{ color: "var(--gold)" }}
-                  />
-                  <p className="max-w-xs text-[0.83rem] leading-relaxed text-white/45">
-                    {profile.address}
-                  </p>
-                </div>
-              </Reveal>
+             
             </div>
 
             {/* ── Channels ── */}
