@@ -152,7 +152,8 @@ export function Editor() {
 
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:flex-row lg:gap-10 lg:py-10">
         <nav className="hidden w-64 shrink-0 lg:block">
-          <div className="sticky top-26 flex flex-col gap-6">
+          {/* Capped above the fixed save bar so the last sections stay reachable */}
+          <div className="sticky top-26 flex max-h-[calc(100svh-11rem)] flex-col gap-6 overflow-y-auto overscroll-contain pb-2">
             {groups.map((group) => (
               <div key={group}>
                 <p className="eyebrow px-3">{group}</p>
